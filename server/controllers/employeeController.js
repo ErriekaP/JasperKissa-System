@@ -16,7 +16,7 @@ exports.mainHome = (req,res) => {
 
 if (sess==true) {
   // Output username
-  res.render("mainhome",{true: {login: true }});
+  res.render("employeehome",{true: {login: true }});
   console.log("You're in the main page.");
 } else {
   // Not logged in
