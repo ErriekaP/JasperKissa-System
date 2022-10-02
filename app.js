@@ -62,6 +62,7 @@ const posroutes = require('./server/routes/PosSystem');
 app.use('/', posroutes);
 
 var sess;
+var empname;
 const employeeroutes = require('./server/routes/employee');
 app.use('/', employeeroutes);
 const adminroutes = require('./server/routes/admin');
@@ -107,6 +108,7 @@ app.post('/auth', function(request, response) {
 				// Authenticate the user
 				request.session.loggedin = true;
 				request.session.username = username;
+				app.locals.empname = request.session.username;
 
 				connection.connect(function(err) {
 					console.log("Connected!");
