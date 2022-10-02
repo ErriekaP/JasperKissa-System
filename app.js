@@ -134,7 +134,7 @@ app.post('/auth', function(request, response) {
 						  var cond0 = '[{"position":"Cashier"}]';
 						  if (emp_position === cond0){
 							console.log("This is a cashier.");
-							response.redirect('PAGE-POS');
+							response.redirect('/OrderTransaction');
 						  }else{
 							console.log("This is an employee.");
 							response.redirect('/employee/home');

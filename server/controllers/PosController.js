@@ -560,6 +560,85 @@ exports.minus_order_entry = (req,res) => {
         
         };
 
+//Transaction Page 
+exports.TransactionPage = (req,res) => {
+
+    //Connect to DB
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        //User the connection
+
+    
+        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id ',[],(err,rows) => {
+
+            
+            // When done with the connection, release it
+    
+            if(!err){
+                res.render('TransactionPage', {rows});
+            } else{
+                console.log(err);
+            }
+    
+            console.log('The data from user table: \n', rows);
+
+
+        });
+    });  
+
+    };
+
+//Find stock by search
+exports.find_trans = (req,res) => {
+
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        let searchTerm = req.body.search;
+        //User the connection
+        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND (item_name LIKE ? OR ot.order_trans_id LIKE ? OR (CONCAT("ID",oe.item_id)) LIKE ?) ORDER BY ot.date_added ', ['%' + searchTerm + '%','%' + searchTerm + '%','%' + searchTerm + '%'],(err,rows) => {
+            // When done with the connection, release it
+            connection.release();
+    
+            if(!err){
+                res.render('TransactionPage', {rows});
+            } else{
+                console.log(err);
+            }
+    
+            console.log('The data from user table: \n', rows);
+
+        });
+    });
+    }
+exports.FindDate = (req,res) => {
+
+        pool.getConnection((err,connection) => {
+            if(err) throw err; //not connected!
+            console.log('Connected as ID' + " " + connection.threadId)
+        
+            let From_searchTerm = req.body.From_SortDate;
+            let To_searchTerm = req.body.To_SortDate;
+        
+            //User the connection
+            connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND  CAST(ot.date_added AS DATE) between ? and ? ORDER BY ot.date_added ', [From_searchTerm,To_searchTerm],(err,rows) => {
+                // When done with the connection, release it
+                connection.release();
+        
+                if(!err){
+                    res.render('TransactionPage', {rows});
+                } else{
+                    console.log(err);
+                }
+        
+                //console.log('The data from user table: \n', rows);
+                console.log("YES"+From_searchTerm);
+                console.log("YES"+To_searchTerm);
+    
+            });
+        });
+        }
 
 
 

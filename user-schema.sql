@@ -66,3 +66,5 @@ CREATE TABLE `inventorymanagement`.`item` (`item_id` INT NOT NULL AUTO_INCREMENT
 
                 connection.query('UPDATE order_transaction t1 SET t1.total_due = (SELECT SUM(t3.total) as total FROM order_entry t2, order_cart t3 WHERE t1.order_trans_id = t2.order_trans_id AND t2.item_id = t3.item_id)',[req.params.id],(err,rows) => {
 UPDATE order_transaction t1 SET t1.total_due = (SELECT SUM(t3.total) as total FROM order_entry t2, order_cart t3 WHERE t1.order_trans_id = t2.order_trans_id AND t2.item_id = t3.item_id ORDER BY t1.order_trans_id DESC LIMIT 1)
+
+,total_time_work =(NOW()-(SELECT g1.total_time_work FROM attendance_records AS g1 JOIN attendance_records AS g2 ON g2.attendanceID = g1.attendanceID WHERE g1.employeeID = ? OR g2.employeeID = ? ORDER BY g1.total_time_work DESC LIMIT 1))

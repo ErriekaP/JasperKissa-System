@@ -62,10 +62,11 @@ pool.getConnection((err, connection) => {
           connection.query(timeinout, function (err,result){
             var db_attype = JSON.stringify(result);
             var cond = '[{"attendance_type":1}]';
+   
             if (db_attype === cond){
               connection.query(
-                "INSERT INTO attendance_records SET employeeID = ?, attendance_type = '0', attendance_dt = NOW()",
-                [e_ID],
+                "INSERT INTO attendance_records SET employeeID = ?, attendance_type = '0',attendance_name = 'Time Out',attendance_dt = NOW()",
+                [e_ID,e_ID,e_ID],
                 (err, rows) => {
                   //When done with connection, release it
                   connection.release();
@@ -81,7 +82,7 @@ pool.getConnection((err, connection) => {
             );
             }else{
               connection.query(
-                "INSERT INTO attendance_records SET employeeID = ?, attendance_type = '1', attendance_dt = NOW()",
+                "INSERT INTO attendance_records SET employeeID = ?, attendance_type = '1',attendance_name = 'Time In', attendance_dt = NOW()",
                 [e_ID],
                 (err, rows) => {
                   //When done with connection, release it
@@ -97,7 +98,8 @@ pool.getConnection((err, connection) => {
 
             );
             }
-          })
+          }) 
+      
         }
         else
         {
@@ -108,9 +110,85 @@ pool.getConnection((err, connection) => {
         }
       });
       });
-
+ 
   }else{
     res.render("attendancerecord", {alert: "Please enter an employee code!" });
   }
 });
 };
+
+exports.Admin_AttendancePage = (req,res) => {
+
+  pool.getConnection((err, connection) => {
+    console.log("Attendance database is connected.");
+    const type = "";
+
+    connection.query('SELECT attendanceID, employeeID, attendance_type,attendance_name, DATE_FORMAT(attendance_dt,"%M %d, %Y") as datein,TIME_FORMAT(attendance_dt, "%I:%i:%s %p") as timein,DAYNAME(attendance_dt) as DN, emp_firstname, emp_lastname FROM attendance_records,employee WHERE attendance_records.employeeID = employee.emp_id', (err, rows)=> {
+      connection.release();
+
+      if(!err){
+        
+        res.render("admin-attendancerecord", {rows});
+       
+      } else {
+        console.log(err);
+      }
+    
+      
+     });
+  });
+};
+
+exports.FindDate = (req,res) => {
+
+  pool.getConnection((err,connection) => {
+      if(err) throw err; //not connected!
+      console.log('Connected as ID' + " " + connection.threadId)
+  
+      let From_searchTerm = req.body.From_SortDate;
+      let To_searchTerm = req.body.To_SortDate;
+  
+      //User the connection
+      connection.query('SELECT attendanceID, employeeID, attendance_type,attendance_name, DATE_FORMAT(attendance_dt,"%M %d, %Y") as datein,TIME_FORMAT(attendance_dt, "%I:%i:%s %p") as timein,DAYNAME(attendance_dt) as DN, emp_firstname, emp_lastname FROM attendance_records,employee WHERE attendance_records.employeeID = employee.emp_id AND  CAST(attendance_dt AS DATE) between ? and ? ORDER BY attendance_dt ', [From_searchTerm,To_searchTerm],(err,rows) => {
+          // When done with the connection, release it
+          connection.release();
+  
+          if(!err){
+              res.render('admin-attendancerecord', {rows});
+          } else{
+              console.log(err);
+          }
+  
+          //console.log('The data from user table: \n', rows);
+          console.log("YES"+From_searchTerm);
+          console.log("YES"+To_searchTerm);
+
+      });
+  });
+  }
+
+  exports.find_attendance = (req,res) => {
+
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+    
+        let searchTerm = req.body.search;
+    
+        //User the connection
+        connection.query('SELECT attendanceID, employeeID, attendance_type,attendance_name, DATE_FORMAT(attendance_dt,"%M %d, %Y") as datein,TIME_FORMAT(attendance_dt, "%I:%i:%s %p") as timein,DAYNAME(attendance_dt) as DN, emp_firstname, emp_lastname FROM attendance_records,employee WHERE attendance_records.employeeID = employee.emp_id AND (emp_firstname LIKE ? OR emp_lastname LIKE ? OR employeeID LIKE ?) ORDER BY attendance_dt ', ['%' + searchTerm + '%','%' + searchTerm + '%','%' + searchTerm + '%'],(err,rows) => {
+            // When done with the connection, release it
+            connection.release();
+    
+            if(!err){
+                res.render('admin-attendancerecord', {rows});
+            } else{
+                console.log(err);
+            }
+    
+            console.log('The data from user table: \n', rows);
+    
+
+        });
+    });
+    }

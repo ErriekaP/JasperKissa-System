@@ -1,10 +1,10 @@
-<div class="p-2"><h2>Stock In History</h2></div>
+<div class="p-2"><h2>Transactions</h2></div>
   {{!<div class="col-6"><h1>Users</h1></div>}}
    <div class="d-flex mb-3"> 
 
     <div class="p-2">
       <div class="mb-3">
-     <form class="d-flex" role="search" method="POST" action="/StockinHistoryPage" novalidate>
+     <form class="d-flex" role="search" method="POST" action="/TransactionPage" novalidate>
        <input class="form-control me-2 " type="search" placeholder="Search by Item/Code/Transaction# " aria-label="Search" name="search" id="search">
           <button class="btn btn-outline-dark" type="submit">Search</button>
            </form>
@@ -60,10 +60,12 @@
       <th scope="col">Item Name</th>
       <th scope="col">Brand</th>
       <th scope="col">Item Category</th>
-      <th scope="col">Supplier</th>
-      <th scope="col">Cost</th>
+      <th scope="col">Quantity</th>
       <th scope="col">Price</th>
-      <th scope="col">Stock Added</th>
+      <th scope="col">Total Due</th>
+      <th scope="col">Amount Received</th>
+      <th scope="col">Amount Change</th>
+      <th scope="col">Type of Transaction</th>
       <th scope="col">Encoded By</th>
       <th scope="col">Date & Time Added</th>
     </tr>
@@ -71,15 +73,17 @@
   <tbody>
     {{#each rows}}
     <tr>
-      <th scope="row">{{this.reff_num}}</th>
+      <th scope="row">{{this.order_trans_id}}</th>
       <td>ID{{this.item_id}}</td>
       <td>{{this.item_name}}</td>
       <td>{{this.brand_name}}</td>
       <td>{{this.category_name}}</td>
-      <td>{{this.company_name}}</td>
-      <td>{{this.price}}</td>
-      <td>{{this.final_price}}</td>
       <td>{{this.new_stock_added}}</td>
+      <td>{{this.final_price}}</td>
+      <td>{{this.total_due}}</td>
+      <td>{{this.amount_received}}</td>
+      <td>{{this.amount_change}}</td>
+      <td>{{this.type_of_transaction}}</td>
       <td>{{this.emp_firstname}}</td>
       <td>{{this.datein}}</td>
 

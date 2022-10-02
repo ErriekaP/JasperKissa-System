@@ -19,6 +19,9 @@ router.get('/OrderEntry/add/:id', PosController.add_each_item);
 
 router.post('/OrderEntry', PosController.find_item);
 
+router.get('/TransactionPage', PosController.TransactionPage);
+router.post('/TransactionPage', PosController.find_trans);
+router.post('/TransactionPage/FindDate', PosController.FindDate);
 
 
 

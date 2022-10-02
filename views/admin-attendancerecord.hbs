@@ -1,17 +1,18 @@
-<div class="p-2"><h2>Stock In History</h2></div>
+  
+<div class="p-2"><h2>Attendance Record</h2></div>
   {{!<div class="col-6"><h1>Users</h1></div>}}
    <div class="d-flex mb-3"> 
 
     <div class="p-2">
       <div class="mb-3">
-     <form class="d-flex" role="search" method="POST" action="/StockinHistoryPage" novalidate>
-       <input class="form-control me-2 " type="search" placeholder="Search by Item/Code/Transaction# " aria-label="Search" name="search" id="search">
+     <form class="d-flex" role="search" method="POST" action="/admin_attendance/" novalidate>
+       <input class="form-control me-2 " type="search" placeholder="Search by ID/Name " aria-label="Search" name="search" id="search">
           <button class="btn btn-outline-dark" type="submit">Search</button>
            </form>
           </div>    
   <p></p>
     <div class="mb-3">
-     <form class="d-flex" role="sortdate" method="POST" action="/StockinHistoryPage/FindDate" novalidate>
+     <form class="d-flex" role="sortdate" method="POST" action="/admin_attendance/FindDate" novalidate>
          <input class="form-control me-2" type="date" placeholder="Sort Date" aria-label="SortDate" name="From_SortDate">
           <input class="form-control me-2" type="date" placeholder="Sort Date" aria-label="SortDate" name="To_SortDate">
     
@@ -55,33 +56,24 @@
   <thead class="thead-dark">
     <tr>
       
-      <th scope="col">Transaction #</th>
-      <th scope="col">Item Code</th>
-      <th scope="col">Item Name</th>
-      <th scope="col">Brand</th>
-      <th scope="col">Item Category</th>
-      <th scope="col">Supplier</th>
-      <th scope="col">Cost</th>
-      <th scope="col">Price</th>
-      <th scope="col">Stock Added</th>
-      <th scope="col">Encoded By</th>
-      <th scope="col">Date & Time Added</th>
+      <th scope="col">AttenID</th>
+      <th scope="col">EmployeeID</th>
+      <th scope="col">Full Name</th>
+      <th scope="col">AttenType</th>
+      <th scope="col">Time</th>
+      <th scope="col">Date</th>
     </tr>
   </thead>
   <tbody>
     {{#each rows}}
     <tr>
-      <th scope="row">{{this.reff_num}}</th>
-      <td>ID{{this.item_id}}</td>
-      <td>{{this.item_name}}</td>
-      <td>{{this.brand_name}}</td>
-      <td>{{this.category_name}}</td>
-      <td>{{this.company_name}}</td>
-      <td>{{this.price}}</td>
-      <td>{{this.final_price}}</td>
-      <td>{{this.new_stock_added}}</td>
-      <td>{{this.emp_firstname}}</td>
-      <td>{{this.datein}}</td>
+      <th scope="row">{{this.attendanceID}}</th>
+      <td>{{this.employeeID}}</td>
+      <td>{{this.emp_firstname}} {{this.emp_lastname}}</td>
+      <td>{{attendance_name}}</td>
+      <td>{{this.timein}}</td>
+      <td>{{this.DN}}, {{this.datein}}</td>
+      
 
     </tr>
   {{/each}}
