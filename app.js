@@ -127,8 +127,19 @@ app.post('/auth', function(request, response) {
 					  {
 						// false logic
 						app.locals.isadmin = false;
-						response.redirect('/employee/home');
 						app.locals.sess= request.session.loggedin;
+						var iscashier= "SELECT position FROM employee WHERE username = '"+username+"'"
+						connection.query(iscashier, function(err,result){
+						  var emp_position = JSON.stringify(result);
+						  var cond0 = '[{"position":"Cashier"}]';
+						  if (emp_position === cond0){
+							console.log("This is a cashier.");
+							response.redirect('PAGE-POS');
+						  }else{
+							console.log("This is an employee.");
+							response.redirect('/employee/home');
+						  }
+						});
 					  }
 					});
 				  });
