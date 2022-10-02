@@ -63,6 +63,7 @@ app.use('/', posroutes);
 
 var sess;
 var empname;
+var isadmin;
 const employeeroutes = require('./server/routes/employee');
 app.use('/', employeeroutes);
 const adminroutes = require('./server/routes/admin');
@@ -117,7 +118,7 @@ app.post('/auth', function(request, response) {
 					  console.log("Result: " + result);
 					  if (result != "") {
 						// true logic
-
+						app.locals.isadmin = true;
 						response.redirect('/adminhome');
 						console.log(request.session);
 						app.locals.sess= request.session.loggedin;
@@ -125,6 +126,7 @@ app.post('/auth', function(request, response) {
 					  else
 					  {
 						// false logic
+						app.locals.isadmin = false;
 						response.redirect('/employee/home');
 						app.locals.sess= request.session.loggedin;
 					  }

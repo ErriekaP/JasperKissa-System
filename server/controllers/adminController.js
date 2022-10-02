@@ -15,8 +15,9 @@ const pool = mysql.createPool({
 exports.adminHome = (req,res) => {
 
   var sess= req.app.locals.sess;
+  var isadmin = req.app.locals.isadmin;
 
-  if (sess==true) {
+  if (sess==true && isadmin==true) {
 		// Output username
     res.render("home" );
   console.log("You're in the main admin page.");
@@ -30,8 +31,9 @@ exports.adminHome = (req,res) => {
 exports.view = (req, res) => {
 
     var sess= req.app.locals.sess;
+    var isadmin = req.app.locals.isadmin;
 
-    if (sess==true) {
+    if (sess==true && isadmin==true) {
       // Output username
       pool.getConnection((err, connection) => {
         if (err) throw err;
@@ -82,8 +84,9 @@ exports.view = (req, res) => {
   exports.employeeform = (req, res) => {
 
     var sess= req.app.locals.sess;
+    var isadmin = req.app.locals.isadmin;
 
-if (sess==true) {
+if (sess==true && isadmin==true) {
   // Output username
   res.render("addemployee");
   console.log("Going to Add Employee page.");
@@ -98,8 +101,9 @@ exports.createEmployee = (req, res) => {
   //res.render('addemployee');
 
   var sess= req.app.locals.sess;
+  var isadmin = req.app.locals.isadmin;
 
-if (sess==true) {
+if (sess==true && isadmin==true) {
   pool.getConnection((err, connection) => {
     const { e_code, e_lastname, e_firstname, e_suffix, e_phone, e_address, e_position, e_username, e_password, e_status } = req.body;
 
@@ -135,8 +139,9 @@ if (sess==true) {
 exports.editEmployee = (req, res) => {
   //res.render('edit-teacher');
   var sess= req.app.locals.sess;
+  var isadmin = req.app.locals.isadmin;
 
-if (sess==true) {
+if (sess==true && isadmin==true) {
   // Output username
   console.log("Going to edit an employee.");
 
@@ -173,8 +178,9 @@ if (sess==true) {
 exports.updateEmployee = (req, res) => {
   //res.render('edit-teacher');
   var sess= req.app.locals.sess;
+  var isadmin = req.app.locals.isadmin;
 
-  if (sess==true) {
+if (sess==true && isadmin==true) {
     // Output username
     const { e_lastname, e_firstname, e_suffix, e_phone, e_address, e_position, e_username, e_password, e_status } = req.body;
 
@@ -235,8 +241,9 @@ exports.deleteEmployee = (req, res) => {
   //res.render('edit-teacher');
 
   var sess= req.app.locals.sess;
+  var isadmin = req.app.locals.isadmin;
 
-if (sess==true) {
+if (sess==true && isadmin==true){
   // Output username
   console.log("Going to delete a employee.");
 
