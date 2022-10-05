@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 //Static Files
-app.use(express.static('public'));
+app.use("/public",express.static('public'));
 
 //Template Engine
 app.engine('hbs',exphbs.engine( {extname: 'hbs'} ));
