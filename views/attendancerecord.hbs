@@ -1,62 +1,106 @@
-<div class="d-md-flex h-md-100 align-items-center">
 
-    <!-- First Half -->
-    <div class="col-md-6 p-0 bg-indigo h-md-100">
-        <div class="text-white d-md-flex align-items-center h-100 p-5 text-center justify-content-center">
-            <div class="logoarea pt-5 pb-5">
- <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">AttenID</th>
-      <th scope="col">EmployeeID</th>
-      <th scope="col">AttenType</th>
-      <th scope="col">Date/Time</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each rows}}
+{{! overall div lg para sa sizing ng lahat ng divs }}
+<meta charset="UTF-8" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  #bg1{
+    background-image: url(/public/bg-slate-final.jpg);
+  }
+</style>
+<div class="flex flex-row h-full">
 
-    <tr>
-      <th scope="row">{{this.attendanceID}}</th>
-      <td>{{this.employeeID}}</td>
-      <td>{{this.attendance_type}}</td>
-      <td>{{this.datein}} {{this.timein}}</td>
-    {{/each}}
-  </tbody>
-</table>
-            </div>
-        </div>
-    </div>
+  {{! bg image div (2/3 ang width) }}
+  <div
+    class="w-1/3 h-full bg-local flex place-content-center items-center rotate-180"
+    id= "bg1";
+  >
+    <div
+      class="rounded-lg h-64 w-full mx-12 bg-slate-200 drop-shadow-2xl rotate-180 shadow-2xl shadow-black flex flex-col items-center"
+    >
+      <h1 class="mt-8 text-2xl font-extrabold">ATTENDANCE RECORD</h1>
 
-    <!-- Second Half -->
-    <div class="col-md-6 p-0 bg-white h-md-100 loginarea">
-        <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
-            <div class="text-center">
-                        <h1 class="text-dark mx-auto my-0 text-uppercase">Attendance Record</h1>
-                        {{#if alert}}
+                              {{#if alert}}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
   {{alert}}
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{/if}}
+      <div class="flex flex-col items-center mt-6">
+        <div>
+          <label
+            for="website-admin"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 mx-8"
+          >Input Employee ID</label>
+          <div class="flex mx-8">
+            <div
+              class="inline-flex items-center px-3 text-gray-900 bg-white rounded-l-md border border-r-0 border-gray-300"
+            >
+              <img
+                src="https://www.svgrepo.com/show/62843/id-card.svg"
+                class="h-5 w-5"
+              />
+            </div>
+            <form action="/attendance/timein" method="POST">
+            <input
+              type="text"
+              id="website-admin"
+              class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value="{{this.emp_id}}"
+              placeholder="Your employee ID"
+              name="e_ID"
+            />
+          </div>
 
-  <form action="/attendance/timein" method="POST">
-<div class="form-floating-mb-3">
-  <input
-    type="text"
-    class="form-control"
-    value="{{this.emp_id}}"
-    placeholder="Your employee ID"
-    name="e_ID"
-  >
-  <label>Employee ID:</label>
-</div>
-<div class="col-12">
-  <input class="btn btn-light" type="submit" value="Time In/Out">
-</div>
-</form> 
-                    </div>
         </div>
+        <button
+          class="place-items-center mt-4 place-content-center text-white bg-gradient-to-r from-gray-500 via-gray-800 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-gray-300 dark:focus:ring-slate-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-2xl"
+        type="submit" value="Time In/Out">Time-in/Time-out</button>
+        </form> 
+      </div>
+
     </div>
-        
-</div>           
+  </div>
+
+  {{! overflow-x-auto relative }}
+  <div class="overflow-x-auto relative w-2/3 h-full flex items-start">
+    <table
+      class="w-screen overflow-hidden text-sm text-left text-gray-500 m-8 shadow-xl shadow-gray-400"
+    >
+      <thead class="text-xs text-gray-300 uppercase bg-slate-900">
+        <tr>
+          <th scope="col" class="py-3 px-6">
+            Attendance ID
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Employee ID
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Activity
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Date & Time
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+            {{#each rows}}
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <th
+            class="py-4 px-6 font-medium text-gray-900 whitespace-wrap dark:text-white"
+          scope="row">{{this.attendanceID}}
+          </th>
+          <td class="py-4 px-6">
+            {{this.employeeID}}
+          </td>
+          <td class="py-4 px-6">
+            {{this.attendance_type}}
+          </td>
+          <td class="py-4 px-6">
+            {{this.datein}} {{this.timein}}
+          </td>
+        </tr>
+          {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
