@@ -1,63 +1,129 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/home">Back</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Add New Stock</li>
-  </ol>
-</nav>
 
-{{#if alert}}
-<div class="alert alert-success alert-dismissible fade show" role="alert" ng-show="show_alert">
-  {{alert}}   
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-</div>
+ {{!-- TOPBAR --}}
+ 
+  <div class="drop-shadow-lg flex fixed h-16 inset-x-0 top-0 bg-slate-900 place-content-between">
+    <div class="flex">
+      <i class="bi bi-basket2-fill text-white place-self-center pl-3 pr-1 text-2xl"></i>
+      <span class="block">
+        <h5 class="px-2 pt-1 text-sky-700 font-semibold">POS Software</h5>
+        <h5 class="px-2 text-white">Pangalan | Cashier</h5>
+      </span>
+    </div>
+    <div class="p-4 place-self-center">
+      <span class="text-green text-green-500 text-4xl"></span>
+    </div>
+  </div>
+    <form class="" method="POST" action="/OrderTransaction" novalidate>
 
-{{/if}}
-
-<form class="row g-3 needs-validation" method="POST" action="/OrderTransaction" novalidate>
-
-<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
-
+  {{!-- CENTER DIV --}}
+    <div class="fixed left-0 inset-x-0">
+    <span class="block p-4 text-sm">
+      <span>TRANSACTION DATE:</span>
+      <span class="font-bold pl-3">{{this.date}}</span>
       <p></p>
- <p>Transacton Date: {{this.date}}</p>
- <button class="btn btn-primary" type="submit">New Transaction</button>
- <a href="" type="button" class="btn btn-light btn small">Search Product</a>
- <a href="" type="button" class="btn btn-light btn small">Settle Payment</a>
- <a href="" type="button" class="btn btn-light btn small">Clear Cart</a>
- <a href="" type="button" class="btn btn-light btn small">Cancel Transaction</a>
-
-<p></p>
-    <div class="col-6">
-    <div class="form-floating">
-      <select class="form-select" id="floatingSelectGrid" value="{{this.encoded_by}}" name="encoded_by" >
+        <div class="col-3">
+        <select class="form-select" id="floatingSelectGrid" value="{{this.encoded_by}}" name="encoded_by" >
         <option selected>Encoded By</option>
             {{#each this.admin_list}}
                  <option value="{{this.emp_id}}"> {{this.emp_firstname}}</option>
             {{/each}}      
              
       </select>
-    </div>
-     </div>
- <p></p>
+      </div>
+    </span>
 
- <table class="table table-bordered table-hover">
+    <div class="fixed container w-full">
+       <table class="table table-bordered table-hover">
   <thead class="thead-dark">
-    <tr>
-      <th scope="col">Item Code</th>
-      <th scope="col">Item Name</th>
-      <th scope="col">Item Category</th>
-      <th scope="col">Price</th>
-      <th scope="col">Qty</th>
-      <th scope="col">Total</th>
-      <th scope="col" class="text-end">Action</th>
+    <tr class="">
+      <th scope="col" class="col-1" >Item Code</th>
+      <th scope="col" class="col-3">Item Name</th>
+      <th scope="col" class="col-2">Item Category</th>
+      <th scope="col" class="col-1">Price</th>
+      <th scope="col" class="col-1">Qty</th>
+      <th scope="col" class="col-1">Total</th>
+      <th scope="col" class="col-2">Action</th>
     </tr>
   </thead>
   <tbody>
 
   </tbody>
 </table> 
-     
-</div>
-   
+    </div>
+  </div>
 
-    </form>
+  {{!-- SIDEBAR  --}}
+  <div class="drop-shadow-lg fixed inset-y-0 right-0 w-1/6 h-full bg-gray-500 mt-16">
+    {{!-- BUTTONS --}}
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-plus-circle"></i>
+         <button class="text-[15px] ml-4 text-gray-200 font-medium" type="submit">NEW TRANSACTION</button>
+    </div>
+
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-search"></i>
+        <button class="text-[15px] ml-4 text-gray-200 font-medium" disabled>SEARCH PRODUCT</button>
+    </div>
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-cash-stack"></i>
+         <button class="text-[15px] ml-4 text-gray-200 font-medium" disabled>SETTLE PAYMENT</button>
+    </div>
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white" type="submit" >
+        <i class="bi bi-printer"></i>
+        <button class="text-[15px] ml-4 text-gray-200 font-medium" disabled>
+          PRINT RECEIPT
+        </button>
+    </div>
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-x-square"></i>
+        <button class="text-[15px] ml-4 text-gray-200 font-medium" disabled>CLEAR CART</button>
+
+    </div>
+    <a href="/ReturnOrderPage" class="nav-link active">
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-list-ul"></i>
+          <div class="text-[15px] ml-4 text-gray-200 font-medium">SALES</div>  
+    </div>
+    </a>
+     <a href="/home" class="nav-link active">
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-house"></i>
+          <div class="text-[15px] ml-4 text-gray-200 font-medium">HOME</div>  
+    </div>
+    </a>
+    <a href="/logout" class="nav-link active">
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <i class="bi bi-box-arrow-left"></i>
+          <div class="text-[15px] ml-4 text-gray-200 font-medium">LOGOUT</div>  
+    </div>
+    </a>
+  </div>
+  {{!-- BOTTOMBAR --}}
+  <div class="fixed flex bottom-0 left-0 h-48 w-10/12 bg-gray-400 place-content-between">
+    <div class="block self-center">
+      <span class="font-bold">
+        <h1 class="p-2 pl-5 text-6xl">00:00:00 am</h1>
+        <h1 class="p-2 pl-5">{{date}}</h1>
+      </span>
+    </div>
+    <div class="flex pr-4 pt-1 place-content-between">
+      <span class="block">
+        <h5 class="p-1">SALES TOTAL</h5>
+        <h6 class="p-1">VAT</h6>
+        <h6 class="p-1">VATABLE</h6>
+        <h5 class="p-1">AMOUNT RECEIVE</h5>
+        <h5 class="p-1">AMOUNT CHANGE</h5>
+      </span>
+      <span class="block">
+        <h5 class="p-1 pl-28 font-bold">000.00</h5>
+        <h6 class="p-1 pl-28 font-bold">000.00</h6>
+        <h6 class="p-1 pl-28 font-bold">000.00</h6>
+        <h5 class="p-1 pl-28 font-bold">000.00</h5>
+        <h5 class="p-1 pl-28 font-bold">000.00</h5>
+      </span>
+    </div>
+  </div>
+   </form>
+
+    

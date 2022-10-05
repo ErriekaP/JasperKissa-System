@@ -1,138 +1,5 @@
-{{!-- <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/invitem">Back</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Add New Stock</li>
-  </ol>
-</nav>
 
-<form class="row g-3 needs-validation" method="POST" action="/POSPage" novalidate>
-<p></p>
-<div class="row">
-  <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
- {{#each transaction_num}}    
-  <div class="fs-6"><i class="bi bi-info-square-fill"> Transaction# {{this.order_trans_id}}
-   | Encoded By: {{this.emp_firstname}} {{this.emp_lastname}}
-   | </i></div>
-{{/each}}
-</div>
- 
-</div> 
-<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
-
-      <p></p>
- <p>Transacton Date: {{this.date}}</p>
- <a href="/OrderEntry" type="button" class="btn btn-light btn small">Search Product</a>
- <a href="" type="button" class="btn btn-light btn small">Clear Cart</a>
- <a href="" type="button" class="btn btn-light btn small">Sales</a>
-   <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn small" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Settle Payment
-</button>
-
-
- <p></p>
- {{#each old}}
-    {{this.old}}
-    {{/each}}
-
- <table class="table table-bordered table-hover">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Item ID</th>
-      <th scope="col">Item Name</th>
-      <th scope="col">Item Category</th>
-      <th scope="col">Price</th>
-      <th scope="col">Available Stock</th>
-      <th scope="col">Qty</th>
-      <th scope="col">Total</th>
-      <th scope="col" class="text-end">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-   {{#each rows}}
-    <form class="row g-3 needs-validation" method="POST" action="/OrderEntry" novalidate>
-
-
-    <tr>
-
-
-      <td >{{this.item_id}}</td>
-      <td>{{this.item_name}}</td>
-      <td>{{this.category_name}}</td>
-      <td>{{this.final_price}}</td>
-      <td>{{this.old_stock}}</td>
-      <td>{{this.new_stock_added}}</td>
-      <td>{{this.total}}</td>
-      <td>
-         <a href="/POSPage/minus/{{this.item_id}}" type="button"  class="btn btn-secondary btn-small"><i class="bi bi-dash-lg"></i> </a>
-    
-   
-        <a href="/POSPage/add/{{this.item_id}}" type="button"  class="btn btn-secondary btn-small" ><i class="bi bi-plus-lg"></i> </a>
-
-      </td>
-
-
-
-      <td class="text-end">
-       <a href="/POSPage/delete/{{this.item_id}}"  type="button"  class="btn btn-danger btn small" id = "dbtn"><i class="bi bi-trash-fill"></i></a>
-
-
-     
-      </td>
-    </tr>
-  {{/each}}
-  </tbody>
-</table> 
-</div>
-{{#each total}}
-     <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded text-end"> 
-      <h4>Sales Total:₱{{total}}</h4>
-       {{/each}}
-       {{#each transaction_num}}
-      <h5>Vat:</h5>
-      <h5>Vatable:</h5>
-      <h5>Amount Received:₱{{amount_received}} </h5>
-      <h4>Amount Change:₱{{amount_change}} </h4>
-      {{/each}}
-</div>
- <button class="btn btn-primary btn small" type="submit" >Submit</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      {{#each total}}
-      <div class="modal-body">
-      <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floatingInput" placeholder="" name="" value="{{total}}" disabled>
-      <label for="floatingInput">Amount Total</label>
-        </div>
-        {{/each}}
-   </form>
-    <form class="row g-3 needs-validation" method="POST" action="/POSPage/rec" novalidate>
-
-       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="" name="received">
-      <label for="floatingInput">Amount Received</label>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div>
-       </form>
-
-    </div>
-  </div>
-</div>
-
- --}}
-
- {{!-- TOPBAR --}}
+{{!-- TOPBAR --}}
   <div class="drop-shadow-lg flex fixed h-16 inset-x-0 top-0 bg-slate-900 place-content-between">
     <div class="flex">
       <i class="bi bi-basket2-fill text-white place-self-center pl-3 pr-1 text-2xl"></i>
@@ -222,15 +89,13 @@
     </div>
     </a>
     
-    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white" disabled>
         <i class="bi bi-cash-stack"></i>
         <button type="button" class="text-[15px] ml-4 text-gray-200 font-medium" >
           SETTLE PAYMENT
         </button>
     </div>
-    <!-- Button trigger modal -->
-
-  <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white" >
+  <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white" type="submit" >
         <i class="bi bi-printer"></i>
         <button type="submit" class="text-[15px] ml-4 text-gray-200 font-medium" >
           PRINT RECEIPT
@@ -244,8 +109,7 @@
     </a>
     <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
         <i class="bi bi-list-ul"></i>
-        <button class="text-[15px] ml-4 text-gray-200 font-medium" disabled>SALES</button>
-
+        <a href="#" class="text-[15px] ml-4 text-gray-200 font-medium">SALES</a>
     </div>
     <a href="/home" class="nav-link active">
     <div class="pl-5 py-4 flex items-center duration-300 cursor-pointer hover:bg-blue-600 text-white">
@@ -264,7 +128,7 @@
   <div class="fixed flex bottom-0 left-0 h-48 w-10/12 bg-gray-400 place-content-between">
     <div class="block self-center">
       <span class="font-bold">
-        <h1 class="p-2 pl-5 text-6xl">00:00:00 am</h1>
+        <input type="text" class="p-2 pl-5 text-6xl" id="floatingInput" placeholder="₱000.00" name="received">
         <h1 class="p-2 pl-5">{{date}}</h1>
       </span>
     </div>
@@ -321,7 +185,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Pay</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
        </form>
 
@@ -329,4 +193,7 @@
   </div>
 </div>
 
+
+  
+     
 

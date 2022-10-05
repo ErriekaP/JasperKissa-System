@@ -570,7 +570,7 @@ exports.TransactionPage = (req,res) => {
         //User the connection
 
     
-        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id ',[],(err,rows) => {
+        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id ORDER BY ot.date_added',[],(err,rows) => {
 
             
             // When done with the connection, release it
@@ -640,6 +640,133 @@ exports.FindDate = (req,res) => {
         });
         }
 
+
+exports.delete_add_all_order_entry = (req,res) => {
+            //Connect to DB
+            pool.getConnection((err,connection) => {
+            if(err) throw err; //not connected!
+            console.log('Connected as ID' + " " + connection.threadId)
+            
+            
+            //User the connection
+            connection.query('DELETE FROM order_cart',[req.params.id],(err,rows) => {
+            // When done with the connection, release it
+            connection.release()
+            
+            if(!err){
+                res.redirect('/POSPage');
+            } 
+            
+            else{
+                console.log(err);
+            }
+            
+            console.log('The data from user table: \n', rows);
+            //console.log('Hi');
+            
+            
+            });
+            });
+            
+            
+            };
+exports.ReturnOrderPage = (req,res) => {
+    //Connect to DB
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        //User the connection
+
+    
+        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id ORDER BY ot.date_added DESC',[],(err,rows) => {
+
+            
+            // When done with the connection, release it
+    
+            if(!err){
+                res.render('PAGE-order-return', {rows});
+            } else{
+                console.log(err);
+            }
+    
+            console.log('The data from user table: \n', rows);
+
+
+        });
+    });  
+            
+            
+ };
+ exports.get_cancel_order_entry = (req,res) => {
+    //Connect to DB
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        //User the connection
+
+    
+        connection.query('SELECT * FROM order_entry WHERE item_id = ?',[req.params.id],(err,rows) => {
+            
+            // When done with the connection, release it
+    
+            if(!err){
+                res.render('edit-return-order', {rows});
+            } else{
+                console.log(err);
+            }
+    
+            console.log('The data from user table: \n', rows);
+
+
+        });
+    });  
+            
+            
+ };
+
+ exports.cancel_order_entry = (req,res) => {
+
+    const{item_name, description,price} = req.body;
+    
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        //User the connection
+        connection.query('UPDATE item SET item_name = ? , price = ? , description = ? WHERE item_id = ? ',[item_name, price, description, req.params.id],(err,rows) => {
+            // When done with the connection, release it
+            connection.release();
+    
+            if(!err){
+
+                pool.getConnection((err,connection) => {
+                    if(err) throw err; //not connected!
+                    console.log('Connected as ID' + " " + connection.threadId)
+                    //User the connection
+                    connection.query('SELECT * FROM order_entry WHERE item_id = ?',[req.params.id],(err,rows) => {
+                        // When done with the connection, release it
+                        connection.release();
+                
+                        if(!err){
+                            res.render('edit-return-order', {rows, alert: `${item_name} has been updated`});
+                        } else{
+                            console.log(err);
+                        }
+                
+                        console.log('The data from user table: \n', rows);          
+                
+                    });
+                });
+
+            } else{
+                console.log(err);
+            }
+    
+            console.log('The data from user table: \n', rows);
+    
+    
+        });
+    });
+}
 
 
         

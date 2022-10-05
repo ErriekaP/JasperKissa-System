@@ -11,6 +11,7 @@ router.get('/POSPage/delete/:id', PosController.delete_all_order_entry);
 router.get('/POSPage/add/:id', PosController.add_order_entry);
 router.get('/POSPage/minus/:id', PosController.minus_order_entry);
 router.post('/POSPage', PosController.add_all_order_entry);
+router.get('/POSPage/delete', PosController.delete_add_all_order_entry);
 router.post('/POSPage/rec', PosController.amn_received);
 
 router.get('/OrderEntry', PosController.get_order_entry);
@@ -23,6 +24,9 @@ router.get('/TransactionPage', PosController.TransactionPage);
 router.post('/TransactionPage', PosController.find_trans);
 router.post('/TransactionPage/FindDate', PosController.FindDate);
 
+router.get('/ReturnOrderPage', PosController.ReturnOrderPage);
+router.get('/ReturnOrderPage/cancel/:id', PosController.get_cancel_order_entry);
+router.post('/ReturnOrderPage/cancel/:id', PosController.cancel_order_entry);
 
 
 //router.get('/OrderEntryCart', PosController.OrderEntryCart);
