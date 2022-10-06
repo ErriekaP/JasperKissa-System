@@ -1,0 +1,96 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ReturnOrderPage">Back</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Cancel Order</li>
+  </ol>
+</nav>
+
+{{#if alert}}
+<div class="alert alert-success alert-dismissible fade show" role="alert" ng-show="show_alert">
+  {{alert}}   
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+</div>
+
+{{/if}}
+
+<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+      <p class="text-uppercase fs-5 text-center fw-bold">Cancel Transaction Details</p>
+
+  {{#each rows}} 
+<form class="row g-3 needs-validation" method="POST" action="/ReturnOrderPage/cancel/{{this.order_trans_id}}" novalidate>
+
+ <div class="container">
+  <div class="row row-cols-2">
+    <p class="text-start fw-semibold">SOLD ITEM(S)</p>
+    <p class="text-start"></p>
+    <div class="col-6">
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.item_id}}" placeholder="Item ID" name="item_id" disabled>
+            <label for="floatingInput">Item ID</label>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.order_trans_id}}" placeholder="Transaction" name="order_trans_id" disabled>
+            <label for="floatingInput">Transaction#</label>
+    </div>
+    
+
+  </div>
+  
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.item_name}}" placeholder="Item Name" name="item_name" disabled>
+            <label for="floatingInput">Item Name</label>
+        </div>
+     </div>
+     <div class="row row-cols-2">
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.final_price}}" placeholder="Price" name="price" disabled>
+            <label for="floatingInput">Price</label>
+        </div>
+     </div>
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.new_stock_added}}" placeholder="New Stock" name="new_stock_added" disabled>
+            <label for="floatingInput">Quantity</label>
+        </div>
+     </div>
+     
+  </div>
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <textarea class="form-control" name="description" placeholder= "Description of the Product" id="description" style="height:200px" disabled>
+                {{this.desc}}
+            </textarea>
+            <label for="description">Description</label>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.total_due}}" placeholder="Total" name="total" disabled>
+            <label for="floatingInput">Total</label>
+        </div>
+     </div>
+       </div>
+     </div>
+    
+{{/each}}
+ </div>
+ <p></p>
+{{!-- BREAK --}}
+<p></p>
+<div class="container">
+  <div class="row row-cols-2">
+    <p></p>
+<div class="col-6 d-grid">
+        <button class="btn btn-primary" type="submit">Cancel Transaction</button>
+    </div>
+</div>
+</div>
+</form>
+

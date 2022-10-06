@@ -1,3 +1,4 @@
+const { escapeExpression } = require('handlebars');
 const mysql = require('mysql');
 const router = require('../routes/PosSystem');
 
@@ -570,7 +571,7 @@ exports.TransactionPage = (req,res) => {
         //User the connection
 
     
-        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id ORDER BY ot.date_added',[],(err,rows) => {
+        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND cancelled = "No"  ORDER BY ot.date_added DESC',[],(err,rows) => {
 
             
             // When done with the connection, release it
@@ -678,9 +679,8 @@ exports.ReturnOrderPage = (req,res) => {
         //User the connection
 
     
-        connection.query('SELECT oe.item_id,ot.order_trans_id, encoded_by,DATE_FORMAT(ot.date_added,"%m-%d-%Y") as datein,new_stock_added, final_price, type_of_transaction,total_due,amount_received,amount_change,emp_firstname,emp_lastname,item_name,category_name,brand_name FROM order_transaction as ot,employee as e, order_entry as oe, item as i, category as c, brand as b WHERE e.emp_id = ot.encoded_by AND oe.order_trans_id = ot.order_trans_id AND oe.item_id = i.item_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id ORDER BY ot.date_added DESC',[],(err,rows) => {
+        connection.query('SELECT * FROM order_transaction, employee WHERE encoded_by = emp_id AND cancelled = "No" ORDER BY order_trans_id DESC',[],(err,rows) => {
 
-            
             // When done with the connection, release it
     
             if(!err){
@@ -688,16 +688,119 @@ exports.ReturnOrderPage = (req,res) => {
             } else{
                 console.log(err);
             }
-    
-            console.log('The data from user table: \n', rows);
-
 
         });
-    });  
-            
+    });          
             
  };
+ exports.add_trans_to_cancel_order_entry = (req,res) => {
+    //Connect to DB
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        connection.query('SELECT * FROM employee WHERE position = "Admin" ',[req.params.id],(err,admin) => {
+
+                // When done with the connection, release it
+    
+            if(!err){
+                res.render('PAGE-cancel-trans', {admin_list:admin});
+                
+            } else{
+                console.log(err);
+            }
+    
+        });
+        });
+      
+ };
+ exports.post_add_trans_to_cancel_order_entry = (req,res) => {
+    //Connect to DB
+    const {emp_id, reason} = req.body;
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+
+            connection.query('INSERT INTO cancel_transaction SET emp_id = ?, reason = ?, order_trans_id = NULL ', [emp_id, reason],(err,rows) => {
+
+                // When done with the connection, release it
+    
+            if(!err){
+                res.render('PAGE-cancel-trans', {rows});
+                res.redirect('/ReturnOrderPage');
+                
+            } else{
+                console.log(err);
+            }
+    
+        });
+        });  
+ };
  exports.get_cancel_order_entry = (req,res) => {
+    //Connect to DB
+   
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        //User the connection
+
+    
+        connection.query('SELECT * FROM order_entry WHERE order_trans_id = ?',[req.params.id],(err,rows) => {
+            connection.query('SELECT * FROM item, order_entry WHERE item.item_id = order_entry.item_id AND order_trans_id = ?',[req.params.id],(err,rows) => {
+                connection.query('SELECT * FROM order_transaction, order_entry,item WHERE item.item_id = order_entry.item_id AND order_entry.order_trans_id = order_transaction.order_trans_id AND order_transaction.order_trans_id = ?',[req.params.id],(err,rows) => {
+                    connection.query('SELECT * FROM employee WHERE position = "Admin" ',[req.params.id],(err,admin) => {
+
+                // When done with the connection, release it
+    
+            if(!err){
+                res.render('edit-return-order', {rows,admin_list:admin});
+                
+            } else{
+                console.log(err);
+            }
+    
+
+        });
+        });
+    });
+});  
+});                  
+ };
+//Add new item 
+exports.cancel_order_entry = (req,res) => {
+    const { order_trans_id,new_stock_added} = req.body;
+    var type,fprice;
+      pool.getConnection((err,connection) => {
+          if(err) throw err; //not connected!
+          console.log('Connected as ID' + " " + connection.threadId)
+      
+          let searchTerm = req.body.search;
+          
+  
+        //   if (req.body.flexRadioDefault == "Small Items") {
+        //       type = "Small Items";
+        //       fprice = price * (1.08/0.76);
+        //   } else {
+        //       type = "Big Items";
+        //       fprice = price * (1.08/0.86);
+        //    }
+  
+          //User the connection
+            connection.query('UPDATE cancel_transaction SET order_trans_id = ? ORDER BY order_cancel_id DESC LIMIT 1',[req.params.id],(err,rows) => {         
+                connection.query('UPDATE order_transaction SET cancelled = "Yes" WHERE order_trans_id = ?',[req.params.id],(err,rows) => {         
+                    connection.query('UPDATE item i, order_entry oe,order_transaction ot SET i.stock = (i.stock+oe.new_stock_added) WHERE i.item_id = oe.item_id AND oe.order_trans_id = ot.order_trans_id AND oe.order_trans_id = ?',[req.params.id],(err,rows) => {         
+             
+              res.render('edit-return-order',{alert: 'Item added successfully.'});
+              res.redirect('/OrderTransaction');
+            }); 
+            });
+        });
+        });
+        
+  }
+
+//Cancelled Order Page 
+exports.CancelledOrderPage = (req,res) => {
+
     //Connect to DB
     pool.getConnection((err,connection) => {
         if(err) throw err; //not connected!
@@ -705,68 +808,21 @@ exports.ReturnOrderPage = (req,res) => {
         //User the connection
 
     
-        connection.query('SELECT * FROM order_entry WHERE item_id = ?',[req.params.id],(err,rows) => {
+        connection.query('SELECT * FROM cancel_transaction',[],(err,rows) => {
+            connection.query('SELECT * FROM item as i, order_entry as oe, cancel_transaction as ct, order_transaction as ot, employee as e, brand as b, category as c WHERE i.item_id = oe.item_id AND oe.order_trans_id = ct.order_trans_id AND e.emp_id = ct.emp_id AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND ot.order_trans_id = ct.order_trans_id',[req.params.id],(err,rows) => {
+
             
             // When done with the connection, release it
     
             if(!err){
-                res.render('edit-return-order', {rows});
+                res.render('CancelledOrdersPage', {rows});
             } else{
                 console.log(err);
             }
     
             console.log('The data from user table: \n', rows);
-
-
+        });
         });
     });  
-            
-            
- };
 
- exports.cancel_order_entry = (req,res) => {
-
-    const{item_name, description,price} = req.body;
-    
-    pool.getConnection((err,connection) => {
-        if(err) throw err; //not connected!
-        console.log('Connected as ID' + " " + connection.threadId)
-        //User the connection
-        connection.query('UPDATE item SET item_name = ? , price = ? , description = ? WHERE item_id = ? ',[item_name, price, description, req.params.id],(err,rows) => {
-            // When done with the connection, release it
-            connection.release();
-    
-            if(!err){
-
-                pool.getConnection((err,connection) => {
-                    if(err) throw err; //not connected!
-                    console.log('Connected as ID' + " " + connection.threadId)
-                    //User the connection
-                    connection.query('SELECT * FROM order_entry WHERE item_id = ?',[req.params.id],(err,rows) => {
-                        // When done with the connection, release it
-                        connection.release();
-                
-                        if(!err){
-                            res.render('edit-return-order', {rows, alert: `${item_name} has been updated`});
-                        } else{
-                            console.log(err);
-                        }
-                
-                        console.log('The data from user table: \n', rows);          
-                
-                    });
-                });
-
-            } else{
-                console.log(err);
-            }
-    
-            console.log('The data from user table: \n', rows);
-    
-    
-        });
-    });
-}
-
-
-        
+    };

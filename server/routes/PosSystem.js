@@ -25,8 +25,12 @@ router.post('/TransactionPage', PosController.find_trans);
 router.post('/TransactionPage/FindDate', PosController.FindDate);
 
 router.get('/ReturnOrderPage', PosController.ReturnOrderPage);
+router.get('/ReturnOrderPage/cancel', PosController.add_trans_to_cancel_order_entry);
+router.post('/ReturnOrderPage/cancel', PosController.post_add_trans_to_cancel_order_entry);
 router.get('/ReturnOrderPage/cancel/:id', PosController.get_cancel_order_entry);
 router.post('/ReturnOrderPage/cancel/:id', PosController.cancel_order_entry);
+
+router.get('/CancelledOrderPage', PosController.CancelledOrderPage);
 
 
 //router.get('/OrderEntryCart', PosController.OrderEntryCart);

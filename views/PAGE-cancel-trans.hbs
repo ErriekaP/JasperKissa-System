@@ -1,0 +1,79 @@
+
+{{#if alert}}
+<div class="alert alert-success alert-dismissible fade show" role="alert" ng-show="show_alert">
+  {{alert}}   
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+</div>
+
+{{/if}}
+
+      <p class="text-uppercase fs-5 text-center fw-bold">Cancel Transaction</p>
+
+<form class="row g-3 needs-validation" method="POST" action="/ReturnOrderPage/cancel" novalidate>
+
+
+ <p></p>
+{{!-- BREAK --}}
+<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+
+<div class="container">
+  <div class="row row-cols-2">
+    <p class="text-start"></p>
+    <p class=""></p>
+    <div class="col-6">
+        <div class="form-floating">
+        <select class="form-select" id="floatingSelectGrid" value="{{this.emp_id}}" name="emp_id">
+            <option selected>Cancelled By</option>
+                {{#each this.admin_list}}
+                    <option value="{{this.emp_id}}"> {{this.emp_firstname}}</option>
+                {{/each}}      
+                
+        </select>
+        </div>
+    </div>
+
+    {{!-- <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="" placeholder="Quantity Cancelled" name="qty_cancelled">
+            <label for="floatingInput">Cancel Qty</label>
+    </div>
+  </div> --}}
+  
+    {{!-- <div class="col-6">
+        <div class="form-floating">
+        <select class="form-select" id="floatingSelectGrid" value="" name="cancelled">
+            <option selected>Add to Inventory</option>
+                <option value=""> Yes </option>
+                <option value=""> No </option>        
+                
+        </select>
+        </div>
+    </div> --}}
+    <div class="col-6">
+        <div class="form-floating">
+        <select class="form-select" id="floatingSelectGrid" value="" name="reason">
+            <option selected>Reason</option>
+                <option value="Invalid Item(s)"> Invalid Item(s) </option>
+                
+        </select>
+        </div>
+    </div>
+
+   <p class=""></p>
+    <p class=""></p>
+    <p class=""></p>
+     
+</div>  
+</div>
+</div>
+<p></p>
+<div class="container">
+  <div class="row row-cols-2">
+    <p></p>
+<div class="col-6 d-grid">
+        <button class="btn btn-primary" type="submit">Cancel Transaction</button>
+    </div>
+</div>
+</div>
+</form>
