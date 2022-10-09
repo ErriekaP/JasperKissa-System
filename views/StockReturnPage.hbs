@@ -1,67 +1,55 @@
-<div class="p-2"><h2>Stock Return</h2></div>
-  {{!<div class="col-6"><h1>Users</h1></div>}}
-   <div class="d-flex mb-3"> 
+<form class="row g-3 needs-validation" method="POST" action="/StockReturnPage" novalidate>
 
-    <div class="p-2">
-      <div class="mb-3">
-     <form class="d-flex" role="search" method="POST" action="/StockReturnPage" novalidate>
-       <input class="form-control me-2 " type="search" placeholder="Search by Item/Reference# " aria-label="Search" name="search" id="search">
-          <button class="btn btn-outline-dark" type="submit">Search</button>
-           </form>
-          </div>    
-  <p></p>
-    <div class="mb-3">
-     <form class="d-flex" role="sortdate" method="POST" action="/StockReturnPage/FindDate" novalidate>
-         <input class="form-control me-2" type="date" placeholder="Sort Date" aria-label="SortDate" name="From_SortDate">
-          <input class="form-control me-2" type="date" placeholder="Sort Date" aria-label="SortDate" name="To_SortDate">
-    
-          <button class="btn btn-outline-dark" type="submit">Search Date</button>
-          </form> 
-          </div>     
+
+ <p class="text-uppercase fs-5 text-center fw-bold">Return Stock</p>
+ <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+     <p class="text-start fw-semibold"></p>
+<div class="container">
+  <div class="row row-cols-2">
+    <div class="col-3">
+        <div class="form-floating">
+        <select class="form-select" id="floatingSelectGrid" value="{{this.emp_id}}" name="emp_id">
+            <option selected>Cancelled By:</option>
+                {{#each this.admin_list}}
+                    <option value="{{this.emp_id}}"> {{this.emp_firstname}}</option>
+                {{/each}}      
+                
+        </select>
         </div>
-      </div>
- 
+    </div>
+    <div class="col-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Quantity Cancelled" name="qty_cancelled">
+            <label for="floatingInput">Quantity</label>
+        </div>
+     </div>
+
+    <div class="col-6">
+        <div class="form-floating">
+        <select class="form-select" id="floatingSelectGrid" value="" name="reason">
+            <option selected>Reason</option>
+                    <option value="Damaged Item(s)">Damaged Item(s)</option> 
+                    <option value="Invalid Item(s)">Invalid Item(s)</option>       
+        </select>
+        </div>
+    </div>
 
 
-<table class="table table-bordered table-hover">
-  <thead class="thead-dark">
-    <tr>
-      
-      <th scope="col">Reference #</th>
-      <th scope="col">Item ID</th>
-      <th scope="col">Item Name</th>
-      <th scope="col">Brand</th>
-      <th scope="col">Item Category</th>
-      <th scope="col">Supplier</th>
-      <th scope="col">Cost</th>
-      <th scope="col">Price</th>
-      <th scope="col">Stock Added</th>
-      <th scope="col">Encoded By</th>
-      <th scope="col">Date & Time Added</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each rows}}
-    <tr>
-      <th scope="row">{{this.reff_num}}</th>
-      <td>{{this.item_id}}</td>
-      <td>{{this.item_name}}</td>
-      <td>{{this.brand_name}}</td>
-      <td>{{this.category_name}}</td>
-      <td>{{this.company_name}}</td>
-      <td>{{this.price}}</td>
-      <td>{{this.final_price}}</td>
-      <td>{{this.new_stock_added}}</td>
-      <td>{{this.emp_firstname}}</td>
-      <td>{{this.datein}}</td>
-      <td>
-        <a href="/StockReturnPage/{{this.reff_num}}/{{this.item_id}}" type="button" class="btn btn-light btn small"><i class="bi bi-pen-fill"></i></a>
+     </div>
+     </div>
+ </div>
 
-      </td>
-  
+<p></p>
 
-    </tr>
-  {{/each}}
+<div class="container">
+  <div class="row row-cols-2">
 
-  </tbody>
-</table> 
+    <div class="col-11">
+
+    </div>
+<div class="col col-lg-1">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+</div>
+</div>
+</form>

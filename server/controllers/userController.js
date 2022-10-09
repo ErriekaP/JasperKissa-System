@@ -353,23 +353,27 @@ exports.viewall = (req,res) => {
         if(err) throw err; //not connected!
         console.log('Connected as ID' + " " + connection.threadId)
         //User the connection
-        connection.query('SELECT stockin_trans_id,stock_entry.item_id,reff_num,new_stock_added,item_name,category.category_id,category_name,description,quantity,price,final_price,stock,type,DATE_FORMAT(stockin_transaction.date_added,"%m-%d-%Y") AS datein,item.emp_id,item.supp_id,item.brand_id,brand_name,emp_firstname,encoded_by FROM item,brand,category,employee,stock_entry,stockin_transaction WHERE item.item_id = ? AND item.category_id = category.category_id AND item.brand_id = brand.brand_id AND stock_entry.item_id = item.item_id AND encoded_by = employee.emp_id AND reff_num = stockin_trans_id ORDER BY stockin_transaction.date_added', [req.params.id],(err,rows) => {
-            connection.query('SELECT item_id,item_name,category.category_id,category_name,description,quantity,price,final_price,stock,type,DATE_FORMAT(item.datein,"%m-%d-%Y") AS datein,item.emp_id,item.supp_id,item.brand_id,brand_name,item.emp_id,emp_firstname FROM item,brand,category,employee WHERE item_id = ? AND item.category_id = category.category_id AND item.brand_id = brand.brand_id AND item.emp_id = employee.emp_id ORDER BY item.datein', [req.params.id],(err,rows2) => {
+        connection.query('SELECT *,DATE_FORMAT(st.date_added,"%m-%d-%Y") AS datein FROM item as i,supplier as s,brand as b,category as c,employee as e,stock_entry as se,stockin_transaction as st WHERE i.item_id = ? AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND se.item_id = i.item_id AND encoded_by = e.emp_id AND reff_num = stockin_trans_id AND s.supp_id = i.supp_id ORDER BY st.date_added', [req.params.id],(err,rows) => {
+            connection.query('SELECT *, DATE_FORMAT(i.datein,"%m-%d-%Y") AS datein FROM item as i,brand as b,category as c,employee as e WHERE i.category_id = c.category_id AND i.brand_id = b.brand_id AND i.emp_id = e.emp_id AND i.item_id=?  ORDER BY i.datein', [req.params.id],(err,rows2) => {
+                connection.query('SELECT *, DATE_FORMAT(cst.date_cancelled,"%m-%d-%Y") AS datein FROM item as i,brand as b,category as c,employee as e,cancel_stock_trans as cst, stock_entry as se,stockin_transaction as st, supplier as s WHERE s.supp_id = cst.supp_id AND i.item_id = ? AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND se.item_id = i.item_id AND cancelled_by = e.emp_id AND reff_num = stockin_trans_id AND cst.reff_id = se.reff_num AND i.item_id = cst.item_id ORDER BY st.date_added', [req.params.id],(err,cancel) => {
+                    connection.query('SELECT *, DATE_FORMAT(ot.date_added,"%m-%d-%Y") AS datein FROM item as i,brand as b,category as c,employee as e, order_entry as oe,order_transaction as ot WHERE i.item_id = ? AND i.category_id = c.category_id AND i.brand_id = b.brand_id AND oe.item_id = i.item_id AND ot.encoded_by = e.emp_id AND ot.order_trans_id = oe.order_trans_id AND cancelled = "No"  ORDER BY ot.date_added', [req.params.id],(err,trans) => {
+
 
             // When done with the connection, release it
             connection.release();
             if(!err){
-                res.render('view-item', {rows,rows2});
+                res.render('view-item', {rows,rows2,cancel:cancel,trans:trans});
             } else{
                 console.log(err);
             }
     
             console.log('The data from user table: \n', rows);
-    
-    
+        });
+        });
         });
     });
     });
+
     };
 
 //Customer Tab//
@@ -1071,8 +1075,8 @@ exports.add_all_stock_entry = (req,res) => {
                    
                        
                      connection.query('INSERT INTO stock_entry(reff_num,item_id,new_stock_added) SELECT stockin_trans_id, stock_cart.item_id,(stock_cart.stock-item.stock) as new_stock FROM stockin_transaction,stock_cart,item WHERE stockin_trans_id = (SELECT stockin_trans_id FROM stockin_transaction ORDER BY stockin_trans_id DESC LIMIT 1) AND item.item_id = stock_cart.item_id ',[],(err,rows) => {
-                    connection.query('UPDATE item i, stock_cart s SET i.stock = s.stock  WHERE i.item_id = s.item_id',[item_id, req.params.id],(err,rows) => {
-                        
+
+                        connection.query('UPDATE item i, stock_cart s SET i.stock = s.stock  WHERE i.item_id = s.item_id',[item_id, req.params.id],(err,rows) => {
 
                      connection.query('DELETE FROM stock_cart',[req.params.id],(err,rows) => {
           
@@ -1109,18 +1113,13 @@ exports.add_all_stock_entry = (req,res) => {
                     console.log('The data from user table: \n', rows);
           
                     console.log('idd \n', stock);
-                    
-            
+                });  
+                });
                 });
             });
 
             });
               });
-           });
-            });
-        
-            
-       
                 }
         
 
@@ -1133,7 +1132,8 @@ exports.get_stocks_cart = (req,res) => {
             
                     //User the connection
             connection.query('INSERT INTO stock_cart(item_id,stock) SELECT item.item_id,stock FROM item WHERE item.item_id = ?',[ req.params.id],(err,rows) => {
-                        // When done with the connection, release it
+
+                // When done with the connection, release it
                             //connection.release();
                 if(!err){
                       
@@ -1150,9 +1150,9 @@ exports.get_stocks_cart = (req,res) => {
                         console.log('The data from user table2: \n', rows);
                         console.log(err);
                         
-                
                     });
                     });
+  
             
 }; 
 
@@ -1638,7 +1638,8 @@ exports.PInv = (req,res) => {
         if(err) throw err; //not connected!
         console.log('Connected as ID' + " " + connection.threadId)
         //User the connection
-        connection.query('SELECT item_id, item_name,i.category_id,i.brand_id,category_name,brand_name,i.description,quantity,price,final_price,stock,i.supp_id, DATE_FORMAT(datein,"%m-%d-%Y") as datein,emp_firstname FROM item AS i,category,brand,employee as e WHERE category.category_id = i.category_id AND brand.brand_id = i.brand_id AND e.emp_id = i.emp_id ',(err,rows) => {
+        connection.query('SELECT *, DATE_FORMAT(datein,"%m-%d-%Y") as datein FROM item as i,category as c,brand as b WHERE c.category_id = i.category_id AND b.brand_id = i.brand_id  GROUP BY i.item_id  ',(err,rows) => {
+
             // When done with the connection, release it
             connection.release();
     
@@ -1650,7 +1651,7 @@ exports.PInv = (req,res) => {
     
             console.log('The data from user table: \n', rows);
     
-    
+ 
         });
     });
     };
@@ -1663,7 +1664,7 @@ exports.viewiteminv = (req,res) => {
         console.log('Connected as ID' + " " + connection.threadId)
         //User the connection
         connection.query('SELECT item_id, item_name,i.category_id,i.brand_id,category_name,brand_name,i.description,quantity,price,final_price,stock,i.supp_id, DATE_FORMAT(datein,"%m-%d-%Y") as datein,emp_firstname FROM item AS i,category,brand,employee as e WHERE category.category_id = i.category_id AND brand.brand_id = i.brand_id AND e.emp_id = i.emp_id AND item_id = ?', [req.params.id],(err,rows) => {
-            
+
             // When done with the connection, release it
             //SELECT item.item_id,item.item_name,item.category,item.description,item.quantity,item.price,item.stock,item.datein,item.markup,item.supplier,employee.emp_firstname FROM item,employee WHERE employee.emp_id = item.emp_id AND item.item_id = ?
             connection.release();
@@ -1680,9 +1681,8 @@ exports.viewiteminv = (req,res) => {
             console.log('The data from user table: \n', rows);
 
     
-    
         });
-    });
+        });
     
     };
 //Find item by search
@@ -2090,7 +2090,55 @@ exports.create_Supplier = (req,res) => {
 }
 
 //Stock Return Page
+
 exports.StockReturnPage = (req,res) => {
+
+    //Connect to DB
+    pool.getConnection((err,connection) => {
+        if(err) throw err; //not connected!
+        console.log('Connected as ID' + " " + connection.threadId)
+        //User the connection
+        connection.query('SELECT *, DATE_FORMAT(st.date_added,"%m/%d/%Y") as formatted_date FROM item as i,stock_entry as se, category as c, employee as e, stockin_transaction as st WHERE se.item_id = i.item_id AND c.category_id = i.category_id AND e.emp_id = st.encoded_by AND st.stockin_trans_id = se.reff_num AND reff_num = ? AND se.item_id = ?',[req.params.reff,req.params.id],(err,rows) => {
+            connection.query('SELECT * FROM employee WHERE position = "Admin" ',(err,admin) => {
+
+            // When done with the connection, release it
+            connection.release();
+    
+            if(!err){
+                res.render('StockReturnPage', {rows,admin_list:admin});
+            } else{
+                console.log(err);
+            }
+    
+        });
+        });
+    });
+
+
+    };
+exports.StockReturnPage_post = (req,res) => {
+        //Connect to DB
+        const {emp_id, reason, qty_cancelled} = req.body;
+        pool.getConnection((err,connection) => {
+            if(err) throw err; //not connected!
+            console.log('Connected as ID' + " " + connection.threadId)
+    
+                connection.query('INSERT INTO cancel_stock_trans SET cancelled_by = ?, reason = ?, qty_cancelled = ? ', [emp_id, reason,qty_cancelled],(err,rows) => {
+    
+                    // When done with the connection, release it
+        
+                if(!err){
+                    res.render('StockReturnPage', {rows});
+                    res.redirect('/StockReturnPage/list');
+                    
+                } else{
+                    console.log(err);
+                }
+        
+            });
+            });  
+     };
+exports.StockReturnPage_list = (req,res) => {
 
     //Connect to DB
     pool.getConnection((err,connection) => {
@@ -2099,13 +2147,13 @@ exports.StockReturnPage = (req,res) => {
         //User the connection
 
     
-        connection.query('SELECT SE.item_id,reff_num, item_name,brand_name,category_name,company_name,price,final_price,new_stock_added,emp_firstname,DATE_FORMAT(ST.date_added,"%m/%d/%Y") as datein, TIME_FORMAT(ST.date_added, "%I:%i:%s %p") as timein FROM stockin_transaction AS ST, stock_entry AS SE, item AS I,supplier AS S, brand AS B, category AS C, employee AS E WHERE stockin_trans_id = reff_num AND SE.item_id = I.item_id AND ST.supplier = S.supp_id AND I.brand_id = B.brand_id AND I.category_id = C.Category_id AND ST.encoded_by = E.emp_id ORDER BY ST.date_added',[],(err,rows) => {
+        connection.query('SELECT SE.item_id,reff_num, item_name,brand_name,category_name,company_name,price,final_price,new_stock_added,emp_firstname,DATE_FORMAT(ST.date_added,"%m/%d/%Y") as datein, TIME_FORMAT(ST.date_added, "%I:%i:%s %p") as timein FROM stockin_transaction AS ST, stock_entry AS SE, item AS I,supplier AS S, brand AS B, category AS C, employee AS E WHERE stockin_trans_id = reff_num AND SE.item_id = I.item_id AND ST.supplier = S.supp_id AND I.brand_id = B.brand_id AND I.category_id = C.Category_id AND ST.encoded_by = E.emp_id AND i.stock != 0 ORDER BY ST.date_added',[],(err,rows) => {
 
             
             // When done with the connection, release it
     
             if(!err){
-                res.render('StockReturnPage', {rows});
+                res.render('StockReturnPageList', {rows});
             } else{
                 console.log(err);
             }
@@ -2132,7 +2180,7 @@ exports.StockReturnPage = (req,res) => {
                 connection.release();
         
                 if(!err){
-                    res.render('StockReturnPage', {rows});
+                    res.render('StockReturnPageList', {rows});
                 } else{
                     console.log(err);
                 }
@@ -2144,11 +2192,65 @@ exports.StockReturnPage = (req,res) => {
         });
         }
     
-     exports.get_each_return = (req,res) => {
-           
-         res.render('view-return');
+    exports.get_each_return = (req,res) => {
+            //Connect to DB
+            const { reff_num,item_id} = req.body;
+            pool.getConnection((err,connection) => {
+                if(err) throw err; //not connected!
+                console.log('Connected as ID' + " " + connection.threadId)
+                //User the connection
+                connection.query('SELECT *, DATE_FORMAT(st.date_added,"%m/%d/%Y") as formatted_date FROM item as i,stock_entry as se, category as c, employee as e, stockin_transaction as st, supplier as s WHERE s.supp_id = st.supplier AND se.item_id = i.item_id AND c.category_id = i.category_id AND e.emp_id = st.encoded_by AND st.stockin_trans_id = se.reff_num AND reff_num = ? AND se.item_id = ?',[req.params.reff,req.params.id],(err,rows) => {
+                    connection.query('SELECT * FROM employee WHERE position = "Admin" ',(err,admin) => {
+                        connection.query('SELECT * FROM cancel_stock_trans as cst,employee as e WHERE e.emp_id = cst.cancelled_by ORDER BY cancel_stock_id DESC LIMIT 1',(err,quan) => {
+
+                    // When done with the connection, release it
+                    connection.release();
+            
+                    if(!err){
+                        res.render('edit-return', {rows,admin_list:admin,quantity:quan});
+                    } else{
+                        console.log(err);
+                    }
+                    console.log('WHAT' +  req.params.reff + req.params.id)
+                });
+                });
+            });
+        });
+         };
+        //Add new item 
+        exports.post_each_return = (req,res) => {
+            const {qty_cancelled} = req.body;
+            var type,fprice;
+              pool.getConnection((err,connection) => {
+                  if(err) throw err; //not connected!
+                  console.log('Connected as ID' + " " + connection.threadId)
+              
+                  let searchTerm = req.body.search;
+                  
+          
+                //   if (req.body.flexRadioDefault == "Small Items") {
+                //       type = "Small Items";
+                //       fprice = price * (1.08/0.76);
+                //   } else {
+                //       type = "Big Items";
+                //       fprice = price * (1.08/0.86);
+                //    }
+          
+                  //User the connection
+
+                    connection.query('UPDATE cancel_stock_trans SET reff_id = ?, item_id = ?, supp_id = (SELECT supplier FROM stockin_transaction WHERE stockin_trans_id = ?) ORDER BY cancel_stock_id DESC LIMIT 1',[req.params.reff,req.params.id,req.params.reff],(err,rows) => {         
+                        connection.query('UPDATE stock_entry SET return_stock = "Yes" WHERE reff_num = ? AND item_id = ? ORDER BY cancel_stock_id DESC LIMIT 1',[req.params.reff,req.params.id],(err,rows) => {         
+                            connection.query('UPDATE item i, stock_entry se,stockin_transaction st, cancel_stock_trans as cst SET i.stock = (i.stock-cst.qty_cancelled) WHERE i.item_id = cst.item_id AND cst.reff_id = st.stockin_trans_id AND cst.reff_id = ? AND cst.item_id = ? ORDER BY cancel_stock_id DESC LIMIT 1',[req.params.reff,req.params.id],(err,rows) => {         
+
+                      res.render('edit-return',{alert: 'Item added successfully.'});
+                      res.redirect('/StockReturnPage');
+                    }); 
+                    });
+                    console.log('WHAT' +  req.params.reff + req.params.id)
+                });
+            });   
+          }
         
-        }
      exports.FindDate_returnpage = (req,res) => {
 
             pool.getConnection((err,connection) => {
@@ -2164,7 +2266,7 @@ exports.StockReturnPage = (req,res) => {
                     connection.release();
             
                     if(!err){
-                        res.render('StockReturnPage', {rows});
+                        res.render('StockReturnPageList', {rows});
                     } else{
                         console.log(err);
                     }
@@ -2176,7 +2278,30 @@ exports.StockReturnPage = (req,res) => {
                 });
             });
             }
-           
+
+ exports.StockReturnHistoryPage = (req,res) => {
+
+                //Connect to DB
+       pool.getConnection((err,connection) => {
+            if(err) throw err; //not connected!
+            console.log('Connected as ID' + " " + connection.threadId)
+                    //User the connection
+            connection.query('SELECT *, DATE_FORMAT(date_cancelled,"%m/%d/%Y") as formatted_date FROM item as i, category as c, employee as e, cancel_stock_trans as cst, brand as b, supplier as supp WHERE cst.item_id = i.item_id AND c.category_id = i.category_id AND e.emp_id = cst.cancelled_by AND b.brand_id = i.brand_id AND supp.supp_id = i.supp_id',(err,rows) => {
+               // When done with the connection, release it
+             connection.release();
+                
+         if(!err){
+               res.render('StockReturnHistoryPage', {rows});
+          } else{
+                 console.log(err);
+        }
+                
+        
+          });
+        });
+            
+            
+  };
 
 /*//Router
 router.get('', (req,res) => {

@@ -1,0 +1,177 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/StockReturnPage/list">Back</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Cancel Order</li>
+  </ol>
+</nav>
+
+{{#if alert}}
+<div class="alert alert-success alert-dismissible fade show" role="alert" ng-show="show_alert">
+  {{alert}}   
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+</div>
+
+{{/if}}
+ <p class="text-uppercase fs-5 text-center fw-bold">Return Stock</p>
+<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+
+<p></p>
+  {{#each rows}} 
+<form class="row g-3 needs-validation" method="POST" action="/StockReturnPage/list/{{this.reff_num}}/{{this.item_id}}" novalidate>
+ <div class="container">
+  <div class="row row-cols-2">
+    <p class="text-start fw-semibold">PRODUCT DETAILS</p>
+    <p class="text-start"></p>
+    <div class="col-6">
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.item_id}}" placeholder="Item ID" name="item_id" disabled>
+            <label for="floatingInput">Item ID</label>
+        </div>
+    </div>
+  
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.item_name}}" placeholder="Item Name" name="item_name" disabled>
+            <label for="floatingInput">Item Name</label>
+        </div>
+     </div>
+      <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.category_name}}" placeholder="Item Name" name="category_name" disabled>
+            <label for="floatingInput">Item Category</label>
+        </div>
+     </div>
+     {{!-- <div class="row row-cols-2"> --}}
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.final_price}}" placeholder="Price" name="price" disabled>
+            <label for="floatingInput">Unit Price</label>
+        </div>
+     </div>
+      {{!-- </div> --}}
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <textarea class="form-control" name="description" placeholder= "Description of the Product" id="description" style="height:200px" disabled>
+                {{this.desc}}
+            </textarea>
+            <label for="description">Description</label>
+        </div>
+    </div>
+     </div>
+    
+</div>
+ </div>
+ <p></p>
+ <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+     <p class="text-start fw-semibold">INVENTORY DETAILS</p>
+<div class="container">
+  <div class="row row-cols-2">
+       <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.stock}}" placeholder="Stock" name="stock" disabled>
+            <label for="floatingInput">Stock(s) Available</label>
+        </div>
+     </div>
+
+     <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.price}}" placeholder="Price" name="price" disabled>
+            <label for="floatingInput">Cost per Item</label>
+        </div>
+     </div>
+
+     </div>
+     </div>
+ </div>
+ 
+<p></p>
+ <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+     <p class="text-start fw-semibold">STOCK IN TRANSACTION DETAILS</p>
+<div class="container">
+  <div class="row row-cols-2">
+       <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.reff_num}}" placeholder="Transaction" name="order_trans_id" disabled>
+            <label for="floatingInput">Transaction#</label>
+    </div>
+</div>
+
+     <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.new_stock_added}}" placeholder="New Stock" name="new_stock_added" disabled>
+            <label for="floatingInput">Quantity Added</label>
+        </div>
+     </div>
+
+  <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.emp_firstname}}" placeholder="Date" name="date" disabled>
+            <label for="floatingInput">Encoded By:</label>
+        </div>
+     </div>
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.company_name}}" placeholder="Company Name" name="company_name" disabled>
+            <label for="floatingInput">Supplier</label>
+        </div>
+     </div>
+   <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.formatted_date}}" placeholder="Date" name="date" disabled>
+            <label for="floatingInput">Date</label>
+        </div>
+     </div>
+
+     </div>
+     </div>
+ </div>
+ {{/each}}        
+<p></p>
+ <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+     <p class="text-start fw-semibold"></p>
+<div class="container">
+  <div class="row row-cols-2">
+ 
+{{#each quantity}} 
+   
+    <div class="col-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput"  value="{{this.emp_firstname}}" placeholder="Cancelled By" name="emp_firstname" disabled>
+            <label for="floatingInput">Cancelled By</label>
+        </div>
+     </div>
+ <div class="col-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput"  value="{{this.qty_cancelled}}" placeholder="Quantity Cancelled" name="qty_cancelled" disabled>
+            <label for="floatingInput">Quantity</label>
+        </div>
+     </div>
+      <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput"  value="{{this.reason}}" placeholder="Reason" name="reason" disabled>
+            <label for="floatingInput">Reason</label>
+        </div>
+     </div>
+
+
+     </div>
+     </div>
+ </div>
+{{/each}}
+
+{{#each rows}} 
+   
+{{!-- BREAK --}}
+<p></p>
+<div class="container">
+  <div class="row row-cols-2">
+    <p></p>
+<div class="col-6 d-grid">
+        <button class="btn btn-primary" type="submit">Cancel Transaction</button>
+    </div>
+</div>
+</div>
+ {{/each}}
+</form>

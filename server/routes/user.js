@@ -89,10 +89,15 @@ router.post('/prodinvitem', userController.findProdInv);
 
 //Stock Return
 router.get('/StockReturnPage', userController.StockReturnPage);
-router.post('/StockReturnPage', userController.findstockreturn_history);
-router.get('/StockReturnPage/:id/:id', userController.get_each_return);
-router.post('/StockReturnPage/FindDate', userController.FindDate_returnpage);
+router.post('/StockReturnPage', userController.StockReturnPage_post);
+router.get('/StockReturnPage/list', userController.StockReturnPage_list);
+router.post('/StockReturnPage/list', userController.findstockreturn_history);
+router.get('/StockReturnPage/list/:reff/:id', userController.get_each_return);
+router.post('/StockReturnPage/list/:reff/:id', userController.post_each_return);
+router.post('/StockReturnPage/list/FindDate', userController.FindDate_returnpage);
 
+//Stock Return History
+router.get('/StockReturnHistoryPage', userController.StockReturnHistoryPage);
 
 //EMPLOYEE
 router.get('/EmployeePage', userController.EmployeePage);

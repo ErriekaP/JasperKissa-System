@@ -72,7 +72,7 @@
 <div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
 <div class="row mb-5">
   <div class="col text-center">
-    <h3>Item Stock-In History</h3>
+    <h3>Stock In History</h3>
   </div>
 </div>
 
@@ -84,6 +84,7 @@
           <th scope="col">Reference#</th>
           <th scope="col">Stock Added</th>
           <th scope="col">Encoded by</th>
+          <th scope="col">Supplier</th>
           <th scope="col" >Date of Stock-In</th>
           
         </tr>
@@ -92,6 +93,81 @@
         {{#each rows}}
         <tr>
           <th scope="row">{{this.reff_num}}</th>
+          <td>{{this.new_stock_added}}</td>
+          <td>{{this.emp_firstname}}</td>
+          <td>{{this.company_name}}</td>
+           <td>{{this.datein}}</td>
+
+        </tr>
+      </tbody>
+      {{/each}}
+    </table>
+  </div>
+ </div>
+</div>
+<p></p>
+<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+<div class="row mb-5">
+  <div class="col text-center">
+    <h3>Stock Return History</h3>
+  </div>
+</div>
+
+ <div class="row">
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Reference#</th>
+          <th scope="col">Qty</th>
+          <th scope="col">Reason</th>
+          <th scope="col">Cancelled by</th>
+          <th scope="col">Supplier</th>
+          <th scope="col" >Date of Stock Return</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {{#each cancel}}
+        <tr>
+          <th scope="row">{{this.reff_id}}</th>
+          <td>{{this.qty_cancelled}}</td>
+          <td>{{this.reason}}</td>
+          <td>{{this.emp_firstname}}</td>
+          <td>{{this.company_name}}</td>
+           <td>{{this.datein}}</td>
+
+        </tr>
+      </tbody>
+      {{/each}}
+    </table>
+  </div>
+ </div>
+</div>
+<p></p>
+<div class="bg-secondary p-2 text-dark bg-opacity-10 border border-2 rounded"> 
+<div class="row mb-5">
+  <div class="col text-center">
+    <h3>Transaction History</h3>
+  </div>
+</div>
+
+ <div class="row">
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Transaction#</th>
+          <th scope="col">Qty Ordered</th>
+          <th scope="col">Encoded By</th>
+          <th scope="col" >Date of Transaction</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {{#each trans}}
+        <tr>
+          <th scope="row">{{this.order_trans_id}}</th>
           <td>{{this.new_stock_added}}</td>
           <td>{{this.emp_firstname}}</td>
            <td>{{this.datein}}</td>
@@ -103,7 +179,6 @@
   </div>
  </div>
 </div>
-
 
 
 

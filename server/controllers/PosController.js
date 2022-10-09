@@ -123,7 +123,7 @@ exports.get_order_entry = (req,res) => {
             if(err) throw err; //not connected!
             console.log('Connected as ID' + " " + connection.threadId)
             //User the connection
-            connection.query('SELECT item_id, item_name,item.category_id,category_name,brand.brand_id,brand_name,description,quantity,price,stock,supp_id,emp_id, DATE_FORMAT(datein,"%m-%d-%Y") as datein FROM item,category,brand WHERE category.category_id = item.category_id AND brand.brand_id = item.brand_id AND stock>0  GROUP BY item_id',(err,rows) => {
+            connection.query('SELECT *, DATE_FORMAT(datein,"%m-%d-%Y") as datein,SUM(new_stock_added) as stock_from_stockin FROM item as i,category as c,brand as b,stock_entry as se WHERE c.category_id = i.category_id AND b.brand_id = i.brand_id AND i.item_id = se.item_id AND stock>0  GROUP BY i.item_id',(err,rows) => {
                 connection.query('SELECT order_trans_id,encoded_by, emp_firstname, emp_lastname FROM order_transaction, employee WHERE order_trans_id = (SELECT order_trans_id FROM order_transaction ORDER BY order_trans_id DESC LIMIT 1) AND encoded_by = emp_id',(err,trans) => {
 
                 // When done with the connection, release it
@@ -679,7 +679,7 @@ exports.ReturnOrderPage = (req,res) => {
         //User the connection
 
     
-        connection.query('SELECT * FROM order_transaction, employee WHERE encoded_by = emp_id AND cancelled = "No" ORDER BY order_trans_id DESC',[],(err,rows) => {
+        connection.query('SELECT * FROM order_transaction, employee WHERE encoded_by = emp_id AND cancelled = "No" AND total_due > 1   ORDER BY order_trans_id DESC',[],(err,rows) => {
 
             // When done with the connection, release it
     
