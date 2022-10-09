@@ -120,6 +120,7 @@ app.post('/auth', function(request, response) {
 						// true logic
 						app.locals.isadmin = true;
 						response.redirect('/adminhome');
+						console.log("This is an admin.");
 						console.log(request.session);
 						app.locals.sess= request.session.loggedin;
 					  }
