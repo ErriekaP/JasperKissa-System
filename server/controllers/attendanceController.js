@@ -11,6 +11,8 @@ const pool = mysql.createPool({
 
 exports.AttendancePage = (req,res) => {
 
+  var sess= req.app.locals.sess;
+
   pool.getConnection((err, connection) => {
     console.log("Attendance database is connected.");
     const type = "";
@@ -20,7 +22,11 @@ exports.AttendancePage = (req,res) => {
 
       if(!err){
         
+        if(sess==true){
+        res.render("employee_attendancerecord", {rows,true: {login: true }});
+        }else{
         res.render("attendancerecord", {rows,true: {login: true }});
+        }
        
       } else {
         console.log(err);
