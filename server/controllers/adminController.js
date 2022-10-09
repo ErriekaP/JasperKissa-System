@@ -16,11 +16,13 @@ exports.adminHome = (req,res) => {
 
   var sess= req.app.locals.sess;
   var isadmin = req.app.locals.isadmin;
+  let empname = req.app.locals.empname;
 
   if (sess==true && isadmin==true) {
 		// Output username
     res.render("home" );
-  console.log("You're in the main admin page.");
+    console.log("You're in the main admin page."+empname);
+    return empname;
 	} else {
 		// Not logged in
 		res.send('Please login to view this page!');
