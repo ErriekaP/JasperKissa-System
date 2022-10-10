@@ -1,11 +1,27 @@
-            <div class="container px-4 px-lg-5 d-flex h-75 align-items-center justify-content-center bg-dark">
-                <div class="d-flex justify-content-center">
-                    <div class="text-center">
-                        <h1 class="text-light mx-auto my-0 text-uppercase">Employee Management</h1>
-                        <h2 class="text-light 50 mx-auto mt-2 mb-5">Good day, employee.</h2>
-                        <a class="btn btn-light" href="/attendance">Attendance</a>
-                        <a class="btn btn-light" href="/myattendance">View your attendance records</a>
-                        <a class="btn btn-light" href="/employeelist">View employee list.</a>
-                    </div>
-                </div>
-            </div>
+            {{> nav-bar}}
+
+                  <div class="position-absolute top-50 start-50 translate-middle">
+
+    <div class="flex md:items-center justify-center">
+      <a href="/OrderTransaction" class="nav-link active">
+        <div class="flex mt-4 ml-4 bg-gray-300 rounded mr-14 w-48 h-48 md:items-center justify-center">
+            <span class="text-3xl font-medium">P.O.S.</span>
+        </div>
+      </a>
+      <a href="/prodinvitem" class="nav-link active">
+        <div class="flex mt-4 ml-4 bg-gray-300 rounded mr-14 w-48 h-48 md:items-center justify-center">
+            <span class="text-3xl font-medium">Inventory</span>
+        </div>
+      </a>
+      <a href="/attendance" class="nav-link active">
+        <div class="flex mt-4 ml-4 bg-gray-300 rounded mr-14 w-48 h-48 md:items-center justify-center">
+            <span class="text-3xl font-medium text-center">Attendance</span>
+        </div>
+      </a>
+            <a href="/attendancerecord/{{this.emp_id}}" class="nav-link active">
+        <div class="flex mt-4 ml-4 bg-gray-300 rounded mr-14 w-48 h-48 md:items-center justify-center">
+            <span class="text-3xl font-medium text-center">Attendance Record</span>
+        </div>
+      </a>
+    </div>
+    </div>

@@ -119,10 +119,10 @@ app.post('/auth', function(request, response) {
 					  if (result != "") {
 						// true logic
 						app.locals.isadmin = true;
+						app.locals.sess= request.session.loggedin;
 						response.redirect('/adminhome');
 						console.log("This is an admin.");
 						console.log(request.session);
-						app.locals.sess= request.session.loggedin;
 					  }
 					  else
 					  {
@@ -159,6 +159,7 @@ app.post('/auth', function(request, response) {
 app.get('/logout',function(req, res){
 	req.session.destroy(function(){
 		app.locals.sess= false;
+		app.locals.isadmin = false;
 	  res.redirect('/');
 	  console.log("out.");
 	});
