@@ -20,13 +20,8 @@ res.render('login', {true: {login: true }});
 
 // View Items
 exports.home = (req,res) => {
-    var isadmin = req.app.locals.isadmin;
-
-    if(isadmin==true){
-        res.render('home');
-    }else{
-        res.render('cashierhome',{layout: 'empty'});
-    }
+    
+  res.render('home');
     };
     
 

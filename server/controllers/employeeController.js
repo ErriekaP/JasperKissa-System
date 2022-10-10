@@ -16,16 +16,11 @@ exports.mainHome = (req,res) => {
 
 if (sess==true) {
   // Output username
-  var iscashier = req.app.locals.iscashier;
-
-  if (iscashier == true){
-    res.render("cashierhome", {layout : 'empty'});
-  }else{
-    res.render("employeehome", {layout : 'empty'});
-  console.log("You're in the main employee page.");}
+  res.render("employeehome",{true: {login: true }});
+  console.log("You're in the main page.");
 } else {
   // Not logged in
-  res.render("errorlogin", {title: 'Error!', layout: 'empty'});
+  res.send('Please login to view this page!');
 }
 };
 
@@ -52,7 +47,7 @@ if (sess==true) {
     });
 } else {
   // Not logged in
-  res.render("errorlogin", {title: 'Error!', layout: 'empty'});
+  res.send('Please login to view this page!');
 }
 };
 
@@ -85,6 +80,6 @@ if (sess==true) {
     });
 } else {
   // Not logged in
-  res.render("errorlogin", {title: 'Error!', layout: 'empty'});
+  res.send('Please login to view this page!');
 }
 };

@@ -64,7 +64,6 @@ app.use('/', posroutes);
 var sess;
 var empname;
 var isadmin;
-var iscashier;
 const employeeroutes = require('./server/routes/employee');
 app.use('/', employeeroutes);
 const adminroutes = require('./server/routes/admin');
@@ -136,7 +135,6 @@ app.post('/auth', function(request, response) {
 						  var cond0 = '[{"position":"Cashier"}]';
 						  if (emp_position === cond0){
 							console.log("This is a cashier.");
-							app.locals.iscashier = true;
 							response.redirect('/OrderTransaction');
 						  }else{
 							console.log("This is an employee.");
@@ -153,7 +151,8 @@ app.post('/auth', function(request, response) {
 			}			
 		});
 	} else {
-		response.render("errorlogin", {title: 'Error!', layout: 'empty'});
+		response.send('Please enter Username and Password!');
+		response.end();
 	}
 });
 
@@ -161,7 +160,6 @@ app.get('/logout',function(req, res){
 	req.session.destroy(function(){
 		app.locals.sess= false;
 		app.locals.isadmin = false;
-		app.locals.iscashier = false;
 	  res.redirect('/');
 	  console.log("out.");
 	});
