@@ -25,7 +25,7 @@ exports.adminHome = (req,res) => {
     return empname;
 	} else {
 		// Not logged in
-		res.send('Please login to view this page!');
+		res.render("errorlogin", {title: 'Error!', layout: 'error'});
 	}
 };
 
@@ -53,7 +53,7 @@ exports.view = (req, res) => {
       });
     } else {
       // Not logged in
-      res.send('Please login to view this page!');
+      res.render("errorlogin", {title: 'Error!', layout: 'error'});
     }
   };
   
@@ -133,7 +133,7 @@ if (sess==true && isadmin==true) {
   });
 } else {
   // Not logged in
-  res.send('Please login to view this page!');
+  res.render("errorlogin", {title: 'Error!', layout: 'error'});
 }
 };
 
@@ -172,7 +172,7 @@ if (sess==true && isadmin==true) {
   });
 } else {
   // Not logged in
-  res.send('Please login to view this page!');
+  res.render("errorlogin", {title: 'Error!', layout: 'error'});
 }
 };
 
@@ -233,7 +233,7 @@ if (sess==true && isadmin==true) {
     });
   } else {
     // Not logged in
-    res.send('Please login to view this page!');
+    res.render("errorlogin", {title: 'Error!', layout: 'error'});
   }
 
 };
@@ -274,6 +274,6 @@ if (sess==true && isadmin==true){
   });
 } else {
   // Not logged in
-  res.send('Please login to view this page!');
+  res.render("errorlogin", {title: 'Error!', layout: 'error'});
 }
 };

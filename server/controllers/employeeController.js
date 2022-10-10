@@ -20,7 +20,7 @@ if (sess==true) {
   console.log("You're in the main page.");
 } else {
   // Not logged in
-  res.send('Please login to view this page!');
+  res.render("errorlogin", {title: 'Error!', layout: 'error'});
 }
 };
 
@@ -47,7 +47,7 @@ if (sess==true) {
     });
 } else {
   // Not logged in
-  res.send('Please login to view this page!');
+  res.render("errorlogin", {title: 'Error!', layout: 'error'});
 }
 };
 
@@ -80,6 +80,6 @@ if (sess==true) {
     });
 } else {
   // Not logged in
-  res.send('Please login to view this page!');
+  res.render("errorlogin", {title: 'Error!', layout: 'error'});
 }
 };
