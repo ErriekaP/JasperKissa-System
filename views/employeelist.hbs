@@ -1,3 +1,5 @@
+ {{> nav-bar}}
+
 <table class="table">
   <thead>
     <tr>
@@ -18,7 +20,7 @@
       <td>{{this.phone}}</td>
       <td>{{this.status}}</td>
       <td>
-          <a href="#" type="button" class="btn btn-dark btn-small"><i class="bi bi-eye"></i>View</a>
+          <a href="/employeeprofile/{{this.emp_id}}" type="button" class="btn btn-dark btn-small"><i class="bi bi-eye"></i>View Profile</a>
       </td>
     </tr>
     {{/each}}

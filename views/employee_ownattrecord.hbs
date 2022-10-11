@@ -1,0 +1,41 @@
+             {{> nav-bar}}
+
+  {{! overflow-x-auto relative }}
+  <div class="flex text-center m-8">
+    <h1>{{this.empname}}'s attendance record history</h1>
+    </div>
+  <div class="overflow-x-auto relative w-2/3 h-full flex items-start text-center">
+    <table
+      class="w-screen overflow-hidden text-sm text-center text-gray-500 m-8 shadow-xl shadow-gray-400"
+    >
+      <thead class="text-xs text-gray-300 uppercase bg-slate-900">
+        <tr>
+          <th scope="col" class="py-3 px-6">
+            Employee ID
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Activity
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Date & Time
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+            {{#each rows}}
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="py-4 px-6">
+            {{this.employeeID}}
+          </td>
+          <td class="py-4 px-6">
+            {{this.attendance_type}}
+          </td>
+          <td class="py-4 px-6">
+            {{this.datein}} {{this.timein}}
+          </td>
+        </tr>
+          {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
