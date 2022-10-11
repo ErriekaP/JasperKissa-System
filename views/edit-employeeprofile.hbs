@@ -35,43 +35,102 @@
               </div>
             </div>
             <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Email</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{this.email}}</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Phone</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{this.phone}}</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Address</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{this.address}}</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Position</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{this.position}}</p>
-              </div>
-            </div>
-          </div>
+            <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/EmployeePage">Back</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Edit Item</li>
+  </ol>
+</nav>
+
+{{#if alert}}
+<div class="alert alert-success alert-dismissible fade show" role="alert" ng-show="show_alert">
+  {{alert}}   
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+</div>
+
+{{/if}}
+
+{{#each rows}}
+<form class="row g-3 needs-validation" method="POST" action="/EditEmployee/{{this.emp_id}}" novalidate>
+
+  <div class="col-5">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.emp_firstname}}" placeholder="Employee First Name" name="emp_firstname">
+            <label for="floatingInput">Firstname</label>
         </div>
+    </div>
+    <div class="col-2">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.employeeSuffix}}" placeholder="Suffix" name="employeeSuffix">
+            <label for="floatingInput">Suffix</label>
+        </div>
+    </div>
+
+     <div class="col-5">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.emp_lastname}}" placeholder="Employee Lastname" name="emp_lastname">
+            <label for="floatingInput">Lastname</label>
+        </div>
+    </div>
+ <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.phone}}" placeholder="Phone" name="phone">
+            <label for="floatingInput">Phone</label>
+        </div>
+    </div>
+    <div class="col-6">
+    <div class="form-floating">
+      <select class="form-select" id="floatingSelectGrid" value="{{this.position}}" name="position">
+        <option selected>Position</option>
+        <option value="Admin">Admin</option>
+        <option value="Cashier">Cashier</option>
+        <option value="Employee">Employee</option>
+        <option value="Others">Others</option>
+      </select>
+    </div>
+  </div>
+    <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.address}}" placeholder="Address" name="address">
+            <label for="floatingInput">Address</label>
+        </div>
+    </div>
+     <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.emial}}" placeholder="Email" name="email">
+            <label for="floatingInput">Email</label>
+        </div>
+    </div>
+     <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.username}}" placeholder="Username" name="username">
+            <label for="floatingInput">Username</label>
+        </div>
+    </div>
+     <div class="col-6">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput" value="{{this.password}}" placeholder="Password" name="password">
+            <label for="floatingInput">Password</label>
+        </div>
+    </div>
+
+  <div class="col-6">
+    <div class="form-floating">
+      <select class="form-select" id="floatingSelectGrid" value="{{this.status}}" name="status">
+        <option selected>Status</option>
+        <option value="active">active</option>
+        <option value="inactive">inactive</option>
+
+      </select>
+    </div>
+  </div>
+
+    <div class="col-12 d-grid">
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+{{/each}}
+</form>
     </div>
   </div>
   {{/each}}

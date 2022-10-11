@@ -8,6 +8,9 @@ router.get('/employee/home', employeeController.mainHome);
 //Go to employee profile
 router.get('/myemployeeprofile', employeeController.emprofile);
 
+//edit employee profile
+router.get('/editemployeeprofile', employeeController.editemprofile);
+
 //look at other people's employee profile
 router.get('/employeeprofile/:id', employeeController.other_emprofile);
 
