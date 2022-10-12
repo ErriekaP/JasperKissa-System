@@ -113,7 +113,8 @@ if (sess==true) {
 }
 };
 
-exports.editemprofile = (req,res)=> {  var sess= req.app.locals.sess;
+exports.editemprofile = (req,res)=> {  
+  var sess= req.app.locals.sess;
   var empusername = req.app.locals.empname;
 
 if (sess==true) {
@@ -121,12 +122,13 @@ if (sess==true) {
     pool.getConnection((err, connection) => {
       const type = "";
   
-      connection.query('SELECT attendanceID, employeeID, attendance_type,attendance_name, DATE_FORMAT(attendance_dt,"%M %d, %Y") as datein,TIME_FORMAT(attendance_dt, "%I:%i:%s %p") as timein,DAYNAME(attendance_dt) as DN FROM attendance_records,employee WHERE attendance_records.employeeID = employee.emp_id AND employee.username = ?', [empusername], (err, rows)=> {
+      connection.query('SELECT * FROM employee WHERE emp_id = ?',[req.params.id],(err,rows) => {
+        // When done with the connection, release it
         connection.release();
-  
+
         if(!err){
           
-          res.render("employee_ownattrecord", {rows, layout: 'empty'});
+          res.render("edit-employeeprofile", {rows, layout: 'empty'});
          
         } else {
           console.log(err);
@@ -135,6 +137,55 @@ if (sess==true) {
         
        });
     });
+  } else {
+  // Not logged in
+  res.render("errorlogin", {title: 'Error!', layout: 'empty'});
+}
+};
+
+exports.update_emprofile = (req,res)=> {  
+  var sess= req.app.locals.sess;
+  var empusername = req.app.locals.empname;
+  const{phone,address,email,username,password} = req.body;
+
+if (sess==true) {   
+   
+  pool.getConnection((err,connection) => {
+      if(err) throw err; //not connected!
+      console.log('Connected as ID' + " " + connection.threadId)
+      //User the connection
+      connection.query('UPDATE employee SET phone = ?, address = ?, email = ?, username = ?, password = ? WHERE emp_id = ? ',[phone,address,email,username,password, req.params.id],(err,rows) => {
+          // When done with the connection, release it
+          connection.release();
+    
+          if(!err){
+
+              pool.getConnection((err,connection) => {
+                  if(err) throw err; //not connected!
+                  console.log('Connected as ID' + " " + connection.threadId)
+                  //User the connection
+                  connection.query('SELECT * FROM employee WHERE emp_id = ?',[req.params.id],(err,rows) => {
+                      // When done with the connection, release it
+                      connection.release();
+              
+                      if(!err){
+                          res.render('edit-employeeprofile', {rows, alert: `Successfully updated`});
+                      } else{
+                          console.log(err);
+                      }        
+              
+                  });
+              });
+
+          } else{
+              console.log(err);
+          }
+  
+          console.log('The data from user table: \n', rows);
+  
+  
+      });
+  });
   } else {
   // Not logged in
   res.render("errorlogin", {title: 'Error!', layout: 'empty'});

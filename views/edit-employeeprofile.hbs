@@ -1,44 +1,7 @@
- {{> nav-bar}}
-{{#each rows}}
-    <div class="row">
-      <div class="col-lg-3 m-8">
-        <div class="card mb-4">
-          <div class="card-body text-center">
-            <img src="/public/user.png" alt="avatar"
-              class="rounded-circle img-fluid style="width: 150px;">
-            <h5 class="my-3">{{this.username}}</h5>
-            <p class="text-muted mb-1">{{this.position}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-8 m-8">
-        <div class="text-right">
-        <a href="/editprofile/{{this.emp_id}}" type="button" class="btn btn-small"><i class="bi bi-pencil"></i>Edit</a>
-        </div>
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Employee ID</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{this.emp_id}}</p>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Full Name</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{this.emp_firstname}} {{this.emp_lastname}} {{this.employeeSuffix}}</p>
-              </div>
-            </div>
-            <hr>
-            <nav aria-label="breadcrumb">
+<nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/EmployeePage">Back</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Edit Item</li>
+    <li class="breadcrumb-item"><a href="/myemployeeprofile">Back</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Edit Employee Profile</li>
   </ol>
 </nav>
 
@@ -52,44 +15,14 @@
 {{/if}}
 
 {{#each rows}}
-<form class="row g-3 needs-validation" method="POST" action="/EditEmployee/{{this.emp_id}}" novalidate>
+<form class="row g-3 needs-validation" method="POST" action="/editprofile/{{this.emp_id}}" novalidate>
 
-  <div class="col-5">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.emp_firstname}}" placeholder="Employee First Name" name="emp_firstname">
-            <label for="floatingInput">Firstname</label>
-        </div>
-    </div>
-    <div class="col-2">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.employeeSuffix}}" placeholder="Suffix" name="employeeSuffix">
-            <label for="floatingInput">Suffix</label>
-        </div>
-    </div>
-
-     <div class="col-5">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.emp_lastname}}" placeholder="Employee Lastname" name="emp_lastname">
-            <label for="floatingInput">Lastname</label>
-        </div>
-    </div>
  <div class="col-6">
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingInput" value="{{this.phone}}" placeholder="Phone" name="phone">
             <label for="floatingInput">Phone</label>
         </div>
     </div>
-    <div class="col-6">
-    <div class="form-floating">
-      <select class="form-select" id="floatingSelectGrid" value="{{this.position}}" name="position">
-        <option selected>Position</option>
-        <option value="Admin">Admin</option>
-        <option value="Cashier">Cashier</option>
-        <option value="Employee">Employee</option>
-        <option value="Others">Others</option>
-      </select>
-    </div>
-  </div>
     <div class="col-6">
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingInput" value="{{this.address}}" placeholder="Address" name="address">
@@ -115,23 +48,8 @@
         </div>
     </div>
 
-  <div class="col-6">
-    <div class="form-floating">
-      <select class="form-select" id="floatingSelectGrid" value="{{this.status}}" name="status">
-        <option selected>Status</option>
-        <option value="active">active</option>
-        <option value="inactive">inactive</option>
-
-      </select>
-    </div>
-  </div>
-
     <div class="col-12 d-grid">
         <button class="btn btn-primary" type="submit">Submit</button>
     </div>
 {{/each}}
 </form>
-    </div>
-  </div>
-  {{/each}}
-</section>

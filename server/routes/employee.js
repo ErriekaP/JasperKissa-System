@@ -9,7 +9,8 @@ router.get('/employee/home', employeeController.mainHome);
 router.get('/myemployeeprofile', employeeController.emprofile);
 
 //edit employee profile
-router.get('/editemployeeprofile', employeeController.editemprofile);
+router.get('/editprofile/:id', employeeController.editemprofile);
+router.post('/editprofile/:id', employeeController.update_emprofile);
 
 //look at other people's employee profile
 router.get('/employeeprofile/:id', employeeController.other_emprofile);
