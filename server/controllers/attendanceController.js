@@ -198,3 +198,92 @@ exports.FindDate = (req,res) => {
         });
     });
     }
+
+exports.Admin_Absentee = (req,res) => {
+  
+  pool.getConnection((err, connection) => {
+    console.log("Attendance database is connected.");
+    const type = "";
+
+    connection.query("select distinct emp_id, emp_firstname, emp_lastname from employee left join attendance_records on employee.emp_id = attendance_records.employeeID where not exists( select * from attendance_records where attendance_records.employeeID = employee.emp_id AND CAST(attendance_records.attendance_dt AS DATE) LIKE curdate()) AND employee.position = 'Cashier' OR 'Employee'", (err, rows)=> {
+      connection.release();
+
+      if(!err){
+        
+        res.render("admin-absentrecord", {rows});
+       
+      } else {
+        console.log(err);
+      }
+    
+      
+     });
+  });
+}; 
+
+exports.Absentee_FindDate = (req,res) => {
+  pool.getConnection((err,connection) => {
+    if(err) throw err; //not connected!
+    console.log('Connected as ID' + " " + connection.threadId)
+
+    let From_searchTerm = req.body.From_SortDate;
+    let To_searchTerm = req.body.To_SortDate;
+
+    //User the connection
+    connection.query("select distinct emp_id, emp_firstname, emp_lastname from employee left join attendance_records on employee.emp_id = attendance_records.employeeID where not exists( select * from attendance_records where attendance_records.employeeID = employee.emp_id AND CAST(attendance_records.attendance_dt AS DATE) BETWEEN ? AND ?) AND employee.position = 'Cashier' OR 'Employee'", [From_searchTerm,To_searchTerm],(err,rows) => {
+     // When done with the connection, release it
+        connection.release();
+
+        if(!err){
+            res.render('admin-absentrecord', {rows});
+        } else{
+            console.log(err);
+        }
+    });
+});
+};
+
+exports.Admin_Late = (req,res) => {
+  pool.getConnection((err, connection) => {
+    console.log("Late record is connected.");
+    const type = "";
+
+    connection.query("select attendanceID, employeeID, attendance_type, attendance_name, emp_firstname, emp_lastname from attendance_records,employee where attendance_records.employeeID = employee.emp_id AND CAST(attendance_records.attendance_dt AS DATE) LIKE curdate() AND CAST(attendance_records.attendance_dt AS TIME) BETWEEN '08:00:00' AND '17:00:00' AND attendance_records.attendance_name = 'Time In'", (err, rows)=> {
+      connection.release();
+
+      if(!err){
+        
+        res.render("admin-laterecord", {rows});
+       
+      } else {
+        console.log(err);
+      }
+    
+      
+     });
+  });
+};
+
+exports.Late_FindDate = (req,res) => {
+
+  pool.getConnection((err,connection) => {
+    if(err) throw err; //not connected!
+    console.log('Connected as ID' + " " + connection.threadId)
+
+    let From_searchTerm = req.body.From_SortDate;
+    let To_searchTerm = req.body.To_SortDate;
+
+    //User the connection
+    connection.query("select attendanceID, employeeID, attendance_type, attendance_name, emp_firstname, emp_lastname from attendance_records,employee where attendance_records.employeeID = employee.emp_id AND CAST(attendance_records.attendance_dt AS DATE) BETWEEN ? AND ? AND CAST(attendance_records.attendance_dt AS TIME) BETWEEN '08:00:00' AND '17:00:00' AND attendance_records.attendance_name = 'Time In'", [From_searchTerm,To_searchTerm],(err,rows) => {
+        // When done with the connection, release it
+        connection.release();
+
+        if(!err){
+            res.render('admin-laterecord', {rows});
+        } else{
+            console.log(err);
+        }
+
+    });
+});
+};

@@ -29,66 +29,6 @@ if (sess==true) {
 }
 };
 
-//View Employees
-exports.view = (req, res) => {
-
-  var sess= req.app.locals.sess;
-
-if (sess==true) {
-    //Connect to DB
-    pool.getConnection((err, connection) => {
-      if (err) throw err;
-      console.log("Employee database is connected.");
-  
-      connection.query('SELECT * FROM employee', (err, rows)=> {
-        connection.release();
-  
-        if(!err){
-          res.render('employeelist', {rows,true: {login: true }});
-        } else {
-          console.log(err);
-        }
-      });
-    });
-} else {
-  // Not logged in
-  res.render("errorlogin", {title: 'Error!', layout: 'empty'});
-}
-};
-
-//Search Employees
-exports.find = (req, res) => {
-
-    var sess= req.app.locals.sess;
-
-if (sess==true) {
-  
-    //Connect to DB
-    pool.getConnection((err, connection) => {
-      if (err) throw err;
-      console.log("Searching employee.");
-  
-      let searchTerm = req.body.search;
-
-      
-      connection.query("SELECT * FROM employee WHERE lastname LIKE ? OR firstname LIKE ? OR emp_id LIKE ?",
-      ["%" + searchTerm + "%", "%" + searchTerm + "%", "%" + searchTerm + "%"], (err, rows)=> {
-        connection.release();
-  
-        if(!err){
-          res.render("employeelist", { rows });
-        } else {
-          console.log(err);
-        }
-      }
-      );
-    });
-} else {
-  // Not logged in
-  res.render("errorlogin", {title: 'Error!', layout: 'empty'});
-}
-};
-
 exports.emprofile = (req,res) => {
   var sess= req.app.locals.sess;
   var empusername = req.app.locals.empname;
@@ -146,7 +86,7 @@ if (sess==true) {
 exports.update_emprofile = (req,res)=> {  
   var sess= req.app.locals.sess;
   var empusername = req.app.locals.empname;
-  const{phone,address,email,username,password} = req.body;
+  const{password} = req.body;
 
 if (sess==true) {   
    
@@ -154,7 +94,7 @@ if (sess==true) {
       if(err) throw err; //not connected!
       console.log('Connected as ID' + " " + connection.threadId)
       //User the connection
-      connection.query('UPDATE employee SET phone = ?, address = ?, email = ?, username = ?, password = ? WHERE emp_id = ? ',[phone,address,email,username,password, req.params.id],(err,rows) => {
+      connection.query('UPDATE employee SET password = ? WHERE emp_id = ? ',[password, req.params.id],(err,rows) => {
           // When done with the connection, release it
           connection.release();
     
@@ -169,7 +109,7 @@ if (sess==true) {
                       connection.release();
               
                       if(!err){
-                          res.render('edit-employeeprofile', {rows, alert: `Successfully updated`});
+                          res.render('edit-employeeprofile', {rows, alert: `Password successfully updated!`, layout: 'empty'});
                       } else{
                           console.log(err);
                       }        
@@ -243,4 +183,8 @@ if (sess==true) {
   // Not logged in
   res.render("errorlogin", {title: 'Error!', layout: 'empty'});
 }
+};
+
+exports.jkcc = (req,res)=> {
+  res.render('jkcc',{layout: 'empty'});
 };

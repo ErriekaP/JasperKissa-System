@@ -1,0 +1,50 @@
+  
+<div class="p-2"><h2>Late Time In Record</h2></div>
+  {{!<div class="col-6"><h1>Users</h1></div>}}
+   <div class="d-flex mb-3"> 
+
+    <div class="p-2">   
+  <p></p>
+    <div class="mb-3">
+     <form class="d-flex" role="sortdate" method="POST" action="/admin_attendance/FindDate" novalidate>
+         <input class="form-control me-2" type="date" placeholder="Sort Date" aria-label="SortDate" name="From_SortDate">
+          <input class="form-control me-2" type="date" placeholder="Sort Date" aria-label="SortDate" name="To_SortDate">
+    
+          <button class="btn btn-outline-dark" type="submit">Search Date</button>
+          </form> 
+          <button class="btn btn-outline-dark" onclick="window.location.href = '/admin_attendance/'">Attendance Record</button>
+          <button class="btn btn-outline-dark" onclick="window.location.href = '/admin_absentee/'">Absentee Record</button>
+          </div>     
+        </div>
+      </div>
+ 
+
+
+<table class="table table-bordered table-hover">
+  <thead class="thead-dark">
+    <tr>
+      
+      <th scope="col">AttenID</th>
+      <th scope="col">EmployeeID</th>
+      <th scope="col">Full Name</th>
+      <th scope="col">AttenType</th>
+      <th scope="col">Time</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rows}}
+    <tr>
+      <th scope="row">{{this.attendanceID}}</th>
+      <td>{{this.employeeID}}</td>
+      <td>{{this.emp_firstname}} {{this.emp_lastname}}</td>
+      <td>{{attendance_name}}</td>
+      <td>{{this.timein}}</td>
+      <td>LATE</td>
+      
+
+    </tr>
+  {{/each}}
+
+  </tbody>
+</table> 

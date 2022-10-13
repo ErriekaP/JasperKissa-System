@@ -15,32 +15,7 @@
 {{/if}}
 
 {{#each rows}}
-<form class="row g-3 needs-validation" method="POST" action="/editprofile/{{this.emp_id}}" novalidate>
-
- <div class="col-6">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.phone}}" placeholder="Phone" name="phone">
-            <label for="floatingInput">Phone</label>
-        </div>
-    </div>
-    <div class="col-6">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.address}}" placeholder="Address" name="address">
-            <label for="floatingInput">Address</label>
-        </div>
-    </div>
-     <div class="col-6">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.emial}}" placeholder="Email" name="email">
-            <label for="floatingInput">Email</label>
-        </div>
-    </div>
-     <div class="col-6">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" value="{{this.username}}" placeholder="Username" name="username">
-            <label for="floatingInput">Username</label>
-        </div>
-    </div>
+<form class="row g-3 needs-validation" method="POST" action="/editpassword/{{this.emp_id}}" novalidate>
      <div class="col-6">
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingInput" value="{{this.password}}" placeholder="Password" name="password">
